@@ -1,0 +1,430 @@
+{% extends "base.html" %}
+
+{% block title %}Financial Reports - FinVest{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4 mb-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h1 class="display-5 fw-bold mb-2">Financial Reports</h1>
+                    <p class="text-muted fs-5">Comprehensive insights into your income, expenses, and financial trends</p>
+                </div>
+                <div>
+                    <i class="fas fa-chart-line fa-4x text-primary opacity-25"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Range Filter -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm reports-filter-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h6 class="card-title mb-0 fw-bold">
+                            <i class="fas fa-calendar-alt me-2"></i>Report Period
+                        </h6>
+                    </div>
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="date_from" class="form-label small fw-bold">From Date</label>
+                            <input type="date" class="form-control form-control-lg border-0 reports-input" 
+                                   id="date_from" name="date_from" value="{{ date_from }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="date_to" class="form-label small fw-bold">To Date</label>
+                            <input type="date" class="form-control form-control-lg border-0 reports-input" 
+                                   id="date_to" name="date_to" value="{{ date_to }}">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">
+                                <i class="fas fa-search me-2"></i>Generate Report
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Cards Section -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm summary-card income-card h-100">
+                <div class="card-body text-center">
+                    <div class="icon-wrapper income-icon mb-3">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <h6 class="card-title text-muted text-uppercase fw-bold small mb-2">Total Income</h6>
+                    <h2 class="fw-bold text-success mb-0">₹{{ "%.2f"|format(total_income) }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm summary-card expense-card h-100">
+                <div class="card-body text-center">
+                    <div class="icon-wrapper expense-icon mb-3">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <h6 class="card-title text-muted text-uppercase fw-bold small mb-2">Total Expenses</h6>
+                    <h2 class="fw-bold text-danger mb-0">₹{{ "%.2f"|format(total_expenses) }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm summary-card balance-card h-100">
+                <div class="card-body text-center">
+                    <div class="icon-wrapper balance-icon mb-3">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h6 class="card-title text-muted text-uppercase fw-bold small mb-2">Net Balance</h6>
+                    <h2 class="fw-bold {{ 'text-success' if net_balance >= 0 else 'text-danger' }} mb-0">
+                        ₹{{ "%.2f"|format(net_balance) }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-5">
+        <!-- Expense Pie Chart -->
+        {% if expense_chart %}
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm chart-card h-100">
+                <div class="card-header border-0 bg-transparent py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-pie-chart me-2 text-danger"></i>
+                        Expenses by Category
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <img src="{{ expense_chart }}" alt="Expense Chart" class="img-fluid chart-image">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Income Bar Chart -->
+        {% if income_chart %}
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm chart-card h-100">
+                <div class="card-header border-0 bg-transparent py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-bar-chart me-2 text-success"></i>
+                        Income by Category
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <img src="{{ income_chart }}" alt="Income Chart" class="img-fluid chart-image">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Trend Charts Section -->
+    <div class="row mb-5">
+        <!-- Monthly Trend Chart -->
+        {% if monthly_chart %}
+        <div class="col-12 mb-4">
+            <div class="card border-0 shadow-sm chart-card h-100">
+                <div class="card-header border-0 bg-transparent py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-line-chart me-2 text-warning"></i>
+                        Monthly Income vs Expenses Trend
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <img src="{{ monthly_chart }}" alt="Monthly Trend Chart" class="img-fluid chart-image">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Cash Flow Chart -->
+        {% if cash_flow_chart %}
+        <div class="col-12 mb-4">
+            <div class="card border-0 shadow-sm chart-card h-100">
+                <div class="card-header border-0 bg-transparent py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-wave-square me-2 text-info"></i>
+                        Net Cash Flow Trend
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <img src="{{ cash_flow_chart }}" alt="Cash Flow Chart" class="img-fluid chart-image">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Category Summary Table -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0 bg-transparent py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-list me-2"></i>
+                        Category-wise Summary
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover reports-table mb-0">
+                            <thead>
+                                <tr class="border-bottom">
+                                    <th class="fw-bold text-uppercase small">Category</th>
+                                    <th class="fw-bold text-uppercase small text-end">Income</th>
+                                    <th class="fw-bold text-uppercase small text-end">Expenses</th>
+                                    <th class="fw-bold text-uppercase small text-end">Net Balance</th>
+                                    <th class="fw-bold text-uppercase small text-end">% of Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for category, data in category_summary.items() %}
+                                <tr class="border-bottom-light">
+                                    <td class="fw-bold">
+                                        <span class="category-badge">{{ category }}</span>
+                                    </td>
+                                    <td class="text-end text-success fw-bold">₹{{ "%.2f"|format(data.income) }}</td>
+                                    <td class="text-end text-danger fw-bold">₹{{ "%.2f"|format(data.expense) }}</td>
+                                    <td class="text-end fw-bold {{ 'text-success' if data.net >= 0 else 'text-danger' }}">
+                                        ₹{{ "%.2f"|format(data.net) }}
+                                    </td>
+                                    <td class="text-end">
+                                        {% if total_expenses > 0 %}
+                                            <span class="badge bg-light text-dark">{{ "%.1f"|format((data.expense / total_expenses) * 100) }}%</span>
+                                        {% else %}
+                                            <span class="badge bg-light text-dark">0.0%</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <!-- Total Row -->
+                                {% if category_summary %}
+                                <tr class="table-active border-top-thick fw-bold">
+                                    <td>TOTAL</td>
+                                    <td class="text-end text-success">₹{{ "%.2f"|format(total_income) }}</td>
+                                    <td class="text-end text-danger">₹{{ "%.2f"|format(total_expenses) }}</td>
+                                    <td class="text-end {{ 'text-success' if net_balance >= 0 else 'text-danger' }}">
+                                        ₹{{ "%.2f"|format(net_balance) }}
+                                    </td>
+                                    <td class="text-end">100%</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Month Summary Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0 bg-transparent py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-calendar-check me-2"></i>
+                        Month-wise Summary
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover reports-table mb-0">
+                            <thead>
+                                <tr class="border-bottom">
+                                    <th class="fw-bold text-uppercase small">Month</th>
+                                    <th class="fw-bold text-uppercase small text-end">Income</th>
+                                    <th class="fw-bold text-uppercase small text-end">Expenses</th>
+                                    <th class="fw-bold text-uppercase small text-end">Net Balance</th>
+                                    <th class="fw-bold text-uppercase small text-end">Transactions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for month_key, data in month_summary.items() %}
+                                <tr class="border-bottom-light">
+                                    <td class="fw-bold">{{ data.month_name }}</td>
+                                    <td class="text-end text-success fw-bold">₹{{ "%.2f"|format(data.income) }}</td>
+                                    <td class="text-end text-danger fw-bold">₹{{ "%.2f"|format(data.expense) }}</td>
+                                    <td class="text-end fw-bold {{ 'text-success' if data.net >= 0 else 'text-danger' }}">
+                                        ₹{{ "%.2f"|format(data.net) }}
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="badge bg-info text-white">{{ data.transaction_count }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Data Message -->
+    {% if not category_summary %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3">
+                        <i class="fas fa-inbox fa-3x text-muted opacity-50"></i>
+                    </div>
+                    <h4 class="fw-bold text-muted mb-2">No Data Available</h4>
+                    <p class="text-muted mb-0">No transactions found for the selected period. Add some transactions to see your financial reports.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .summary-card {
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .summary-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .summary-card .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        font-size: 24px;
+        color: white;
+    }
+
+    .income-card .icon-wrapper {
+        background-color: #28a745;
+    }
+
+    .expense-card .icon-wrapper {
+        background-color: #dc3545;
+    }
+
+    .balance-card .icon-wrapper {
+        background-color: #0d6efd;
+    }
+
+    .reports-filter-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border) !important;
+    }
+
+    .reports-input {
+        background: rgba(255, 255, 255, 0.5) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border) !important;
+        transition: all 0.3s ease;
+    }
+
+    .reports-input:focus {
+        background: rgba(255, 255, 255, 0.7) !important;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+        border-color: #667eea !important;
+    }
+
+    .chart-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border) !important;
+    }
+
+    .chart-image {
+        border-radius: 12px;
+        max-height: 400px;
+        object-fit: contain;
+    }
+
+    .category-badge {
+        display: inline-block;
+        padding: 0.4rem 0.8rem;
+        background-color: #e8f4f8;
+        border-radius: 8px;
+        border-left: 3px solid #667eea;
+    }
+
+    .reports-table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .reports-table tbody tr:hover {
+        background-color: rgba(102, 126, 234, 0.05);
+    }
+
+    .border-bottom-light {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .border-top-thick {
+        border-top: 2px solid rgba(0, 0, 0, 0.1) !important;
+    }
+
+    [data-theme="dark"] .reports-filter-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border) !important;
+    }
+
+    [data-theme="dark"] .reports-input {
+        background: rgba(30, 30, 35, 0.6) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: var(--text-color) !important;
+    }
+
+    [data-theme="dark"] .reports-input:focus {
+        background: rgba(30, 30, 35, 0.8) !important;
+        border-color: #667eea !important;
+    }
+
+    [data-theme="dark"] .chart-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border) !important;
+    }
+
+    [data-theme="dark"] .summary-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border) !important;
+    }
+
+    [data-theme="dark"] .category-badge {
+        background: rgba(102, 126, 234, 0.15);
+        border-color: #667eea;
+    }
+
+    [data-theme="dark"] .reports-table tbody tr:hover {
+        background-color: rgba(102, 126, 234, 0.08);
+    }
+</style>
+
+<script>
+    // Auto-submit form when date range changes
+    document.getElementById('date_from').addEventListener('change', function() {
+        this.form.submit();
+    });
+
+    document.getElementById('date_to').addEventListener('change', function() {
+        this.form.submit();
+    });
+</script>
+{% endblock %}

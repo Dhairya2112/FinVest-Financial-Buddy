@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.name }} - FinVest{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4 mb-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h1 class="display-5 fw-bold mb-2">{{ event.name }}</h1>
+                    <p class="text-muted fs-5">{{ event.start_date }} to {{ event.end_date }}</p>
+                </div>
+                <a href="{{ url_for('events.index') }}" class="btn btn-outline-secondary fw-bold">
+                    <i class="fas fa-arrow-left me-2"></i>Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Budget Summary -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, rgba(13, 110, 253, 0.1) 0%, rgba(13, 110, 253, 0.05) 100%);">
+                <div class="card-body text-center py-4">
+                    <h6 class="text-muted fw-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Total Budget</h6>
+                    <h2 class="fw-bold text-primary mb-0">₹{{ "%.0f"|format(event.budget or 0) }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);">
+                <div class="card-body text-center py-4">
+                    <h6 class="text-muted fw-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Spent</h6>
+                    <h2 class="fw-bold text-danger mb-0">₹{{ "%.0f"|format(total_spent or 0) }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 100%);">
+                <div class="card-body text-center py-4">
+                    <h6 class="text-muted fw-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Remaining</h6>
+                    <h2 class="fw-bold {{ 'text-success' if remaining_budget >= 0 else 'text-danger' }} mb-0">₹{{ "%.0f"|format([remaining_budget, 0]|max) }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm h-100" {% if progress_percentage >= 100 %}style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.15) 0%, rgba(220, 53, 69, 0.05) 100%); border: 2px solid rgba(220, 53, 69, 0.3);"{% else %}style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);"{% endif %}>
+                <div class="card-body text-center py-4">
+                    <h6 class="text-muted fw-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Progress</h6>
+                    <h2 class="fw-bold {{ 'text-danger' if progress_percentage >= 100 else 'text-warning' if progress_percentage >= 75 else 'text-muted' }} mb-2">{{ progress_percentage }}%</h2>
+                    {% if progress_percentage >= 100 %}
+                    <small class="text-danger fw-bold d-block">⚠ Over Budget</small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="progress" style="height: 20px;">
+                {% if progress_percentage >= 100 %}
+                    <div class="progress-bar bg-danger" style="width: 100%"><small class="fw-bold text-white">Over Budget</small></div>
+                {% elif progress_percentage >= 75 %}
+                    <div class="progress-bar bg-warning" style="width: {{ progress_percentage }}%"><small class="fw-bold">{{ "%.0f"|format(progress_percentage) }}%</small></div>
+                {% else %}
+                    <div class="progress-bar bg-success" style="width: {{ progress_percentage }}%"><small class="fw-bold text-white">{{ "%.0f"|format(progress_percentage) }}%</small></div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Transaction Form -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0 bg-light py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-plus-circle me-2"></i>Add Transaction
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('events.add_event_transaction', event_id=event.id) }}" class="row g-3">
+                        <!-- Hidden field to set type as expense -->
+                        <input type="hidden" name="transaction_type" value="expense">
+                        
+                        <div class="col-md-4">
+                            <label for="transAmount" class="form-label small fw-bold">Amount (₹) *</label>
+                            <input type="number" step="0.01" min="0" class="form-control border-0 reports-input" id="transAmount" name="amount" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="transDate" class="form-label small fw-bold">Date * ({{ event.start_date }} - {{ event.end_date }})</label>
+                            <input type="date" class="form-control border-0 reports-input" id="transDate" name="date" min="{{ event.start_date }}" max="{{ event.end_date }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="transCategory" class="form-label small fw-bold">Category *</label>
+                            <select class="form-select border-0 reports-input" id="transCategory" name="category" required>
+                                <option value="">Select category</option>
+                                <option value="Food">Food</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Bills">Bills</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="transDescription" class="form-label small fw-bold">Description (optional)</label>
+                            <input type="text" class="form-control border-0 reports-input" id="transDescription" name="description" placeholder="Add a note...">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary fw-bold">
+                                <i class="fas fa-save me-2"></i>Add Transaction
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0 bg-light py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-list me-2"></i>Transactions ({{ transactions|length }})
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if transactions %}
+                    <div class="table-responsive">
+                        <table class="table table-hover reports-table mb-0">
+                            <thead>
+                                <tr class="border-bottom">
+                                    <th class="fw-bold text-uppercase small">Date</th>
+                                    <th class="fw-bold text-uppercase small">Description</th>
+                                    <th class="fw-bold text-uppercase small">Category</th>
+                                    <th class="fw-bold text-uppercase small">Type</th>
+                                    <th class="fw-bold text-uppercase small text-end">Amount</th>
+                                    <th class="fw-bold text-uppercase small" style="width: 60px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tx in transactions %}
+                                <tr class="border-bottom-light">
+                                    <td class="fw-bold">{{ tx.date }}</td>
+                                    <td>{{ tx.description or '-' }}</td>
+                                    <td><span class="category-badge">{{ tx.category }}</span></td>
+                                    <td><span class="badge {{ 'bg-success' if tx.type == 'income' else 'bg-danger' }}">{{ tx.type }}</span></td>
+                                    <td class="fw-bold text-end {{ 'text-success' if tx.type == 'income' else 'text-danger' }}">₹{{ "%.2f"|format(tx.amount) }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteTransaction({{ tx.id }})" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-inbox fa-3x text-muted opacity-50 mb-3"></i>
+                        <p class="text-muted small">No transactions yet</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function deleteTransaction(txId) {
+        if (confirm('Delete this transaction?')) {
+            fetch(`/events/api/delete-transaction/${txId}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Transaction deleted!');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred.');
+                });
+        }
+    }
+</script>
+
+{% endblock %}

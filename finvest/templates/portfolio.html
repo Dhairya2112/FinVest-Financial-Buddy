@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio - Finvest{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4 mb-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h1 class="display-5 fw-bold mb-2">Portfolio Management</h1>
+                    <p class="text-muted fs-5">Track and manage your investment portfolio</p>
+                </div>
+                <button class="btn btn-primary btn-lg fw-bold" data-bs-toggle="modal" data-bs-target="#addAssetModal">
+                    <i class="fas fa-plus-circle me-2"></i>Add New Asset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Summary Cards -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm summary-card h-100">
+                <div class="card-body text-center">
+                    <div style="font-size: 2rem; color: #495057;">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h6 class="card-title text-muted text-uppercase fw-bold small mb-2">Total Value</h6>
+                    <h2 class="fw-bold mb-0">₹{{ "%.2f"|format(summary.total_value) }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm summary-card h-100">
+                <div class="card-body text-center">
+                    <div style="font-size: 2rem; color: #495057;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h6 class="card-title text-muted text-uppercase fw-bold small mb-2">Total P/L</h6>
+                    <h2 class="fw-bold {{ 'text-success' if summary.total_pl >= 0 else 'text-danger' }} mb-0">
+                        ₹{{ "%.2f"|format(summary.total_pl) }}
+                    </h2>
+                    <p class="small {{ 'text-success' if summary.total_pl >= 0 else 'text-danger' }} mt-2">
+                        {{ "%.1f"|format(summary.total_pl_percent) }}%
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm summary-card h-100">
+                <div class="card-body text-center">
+                    <div style="font-size: 2rem; color: #495057;">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h6 class="card-title text-muted text-uppercase fw-bold small mb-2">Total Assets</h6>
+                    <h2 class="fw-bold mb-0">{{ summary.asset_count }}</h2>
+                    <p class="text-muted small mt-2">items in portfolio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm reports-filter-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h6 class="card-title mb-0 fw-bold">
+                            <i class="fas fa-filter me-2"></i>Search & Filter Assets
+                        </h6>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="searchInput" class="form-label small fw-bold">Search</label>
+                            <input type="text" class="form-control border-0 reports-input" id="searchInput" placeholder="Name or symbol...">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="assetTypeFilter" class="form-label small fw-bold">Asset Type</label>
+                            <select class="form-select border-0 reports-input" id="assetTypeFilter">
+                                <option value="">All Asset Types</option>
+                                <option value="Stock">Stock</option>
+                                <option value="Bond">Bond</option>
+                                <option value="ETF">ETF</option>
+                                <option value="Crypto">Crypto</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="sortBy" class="form-label small fw-bold">Sort By</label>
+                            <select class="form-select border-0 reports-input" id="sortBy">
+                                <option value="name">Name</option>
+                                <option value="symbol">Symbol</option>
+                                <option value="total_value">Value</option>
+                                <option value="unrealized_pl_percent">P/L %</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="sortOrder" class="form-label small fw-bold">Order</label>
+                            <select class="form-select border-0 reports-input" id="sortOrder">
+                                <option value="ASC">Ascending</option>
+                                <option value="DESC">Descending</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assets Container -->
+    <div class="row mb-5" id="assetsContainer">
+        {% for asset in assets %}
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-4" data-asset-id="{{ asset.id }}">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header border-0 bg-light py-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-title mb-1 fw-bold">{{ asset.name }}</h6>
+                            <small class="text-muted">{{ asset.symbol }}</small>
+                        </div>
+                        <span class="badge bg-primary fw-bold">{{ asset.asset_type }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-6 text-center">
+                            <small class="text-muted text-uppercase fw-bold">Price</small>
+                            <div class="h6 mb-0 fw-bold">₹{{ "%.2f"|format(asset.current_price) }}</div>
+                        </div>
+                        <div class="col-6 text-center">
+                            <small class="text-muted text-uppercase fw-bold">Qty</small>
+                            <div class="h6 mb-0 fw-bold">{{ "%.4f"|format(asset.quantity) }}</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <small class="text-muted text-uppercase fw-bold">Value</small>
+                            <div class="h6 mb-0 fw-bold">₹{{ "%.2f"|format(asset.total_value) }}</div>
+                        </div>
+                        <div class="col-6 text-end">
+                            <small class="text-muted text-uppercase fw-bold">P/L</small>
+                            <div class="h6 mb-0 fw-bold {{ 'text-success' if asset.unrealized_pl >= 0 else 'text-danger' }}">
+                                ₹{{ "%.2f"|format(asset.unrealized_pl) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <span class="badge {{ 'bg-success' if asset.unrealized_pl_percent >= 0 else 'bg-danger' }} fw-bold">
+                            {{ "%.1f"|format(asset.unrealized_pl_percent) }}%
+                        </span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-sm btn-primary update-price-btn" data-asset-id="{{ asset.id }}">
+                            <i class="fas fa-sync me-1"></i>Update Price
+                        </button>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button class="btn btn-outline-warning edit-asset-btn" data-asset-id="{{ asset.id }}" data-bs-toggle="modal" data-bs-target="#editAssetModal">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-outline-danger delete-asset-btn" data-asset-id="{{ asset.id }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-chart-pie fa-3x text-muted opacity-50 mb-3"></i>
+                    <h5 class="fw-bold text-muted mb-2">No Assets Yet</h5>
+                    <p class="text-muted mb-0">Start building your portfolio by adding your first asset.</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm chart-card h-100">
+                <div class="card-header border-0 bg-transparent py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-bar-chart me-2 text-info"></i>
+                        Portfolio Growth
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if growth_chart %}
+                        <img src="{{ growth_chart }}" alt="Portfolio Growth" class="img-fluid chart-image">
+                    {% else %}
+                        <p class="text-center text-muted py-5">No growth data available yet. Add assets and update prices.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm chart-card h-100">
+                <div class="card-header border-0 bg-transparent py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-pie-chart me-2 text-warning"></i>
+                        Asset Allocation
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if allocation_chart %}
+                        <img src="{{ allocation_chart }}" alt="Asset Allocation" class="img-fluid chart-image">
+                    {% else %}
+                        <p class="text-center text-muted py-5">No allocation data available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Risk & Alerts -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0 bg-transparent py-3">
+                    <h6 class="card-title mb-0 fw-bold d-flex align-items-center">
+                        <i class="fas fa-bell me-2 text-info"></i>
+                        Alerts
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if alerts %}
+                        {% for alert in alerts %}
+                        <div class="alert alert-{{ 'success' if alert.type == 'profit' else 'warning' }} alert-dismissible fade show mb-2" role="alert">
+                            <strong>{{ alert.asset }}</strong> ({{ alert.symbol }})
+                            {% if alert.type == 'profit' %}
+                                <br><small>gained {{ alert.change_percent }}% (+₹{{ alert.change_amount }})</small>
+                            {% else %}
+                                <br><small>lost {{ alert.change_percent }}% (-₹{{ alert.change_amount }})</small>
+                            {% endif %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center text-muted py-4">No alerts at this time.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Asset Modal -->
+<div class="modal fade" id="addAssetModal" tabindex="-1" aria-labelledby="addAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="addAssetModalLabel">
+                    <i class="fas fa-plus-circle me-2"></i>Add New Asset
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addAssetForm" action="/portfolio/add" method="POST">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label fw-bold">Asset Name</label>
+                            <input type="text" class="form-control border-0 reports-input" id="name" name="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="symbol" class="form-label fw-bold">Symbol/Ticker</label>
+                            <input type="text" class="form-control border-0 reports-input" id="symbol" name="symbol" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="asset_type" class="form-label fw-bold">Asset Type</label>
+                            <select class="form-select border-0 reports-input" id="asset_type" name="asset_type" required>
+                                <option value="">Select Type</option>
+                                <option value="Stock">Stock</option>
+                                <option value="Bond">Bond</option>
+                                <option value="ETF">ETF</option>
+                                <option value="Crypto">Crypto</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="current_price" class="form-label fw-bold">Current Price (₹)</label>
+                            <input type="number" step="0.01" class="form-control border-0 reports-input" id="current_price" name="current_price" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="quantity" class="form-label fw-bold">Quantity</label>
+                            <input type="number" step="0.0001" class="form-control border-0 reports-input" id="quantity" name="quantity" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="purchase_price" class="form-label fw-bold">Purchase Price (₹)</label>
+                            <input type="number" step="0.01" class="form-control border-0 reports-input" id="purchase_price" name="purchase_price" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="purchase_date" class="form-label fw-bold">Purchase Date</label>
+                        <input type="date" class="form-control border-0 reports-input" id="purchase_date" name="purchase_date" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary fw-bold">Add Asset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Update Price Modal -->
+<div class="modal fade" id="updatePriceModal" tabindex="-1" aria-labelledby="updatePriceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="updatePriceModalLabel">
+                    <i class="fas fa-edit me-2"></i>Update Asset Price
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="updatePriceForm">
+                <div class="modal-body">
+                    <input type="hidden" id="asset_id" name="asset_id">
+                    <div class="mb-3">
+                        <label for="new_price" class="form-label fw-bold">New Price (₹)</label>
+                        <input type="number" step="0.01" class="form-control border-0 reports-input" id="new_price" name="new_price" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary fw-bold">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Asset Modal -->
+<div class="modal fade" id="editAssetModal" tabindex="-1" aria-labelledby="editAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="editAssetModalLabel">
+                    <i class="fas fa-edit me-2"></i>Edit Asset
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editAssetForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_name" class="form-label fw-bold">Asset Name</label>
+                            <input type="text" class="form-control border-0 reports-input" id="edit_name" name="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_symbol" class="form-label fw-bold">Symbol/Ticker</label>
+                            <input type="text" class="form-control border-0 reports-input" id="edit_symbol" name="symbol" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_asset_type" class="form-label fw-bold">Asset Type</label>
+                            <select class="form-select border-0 reports-input" id="edit_asset_type" name="asset_type" required>
+                                <option value="">Select Type</option>
+                                <option value="Stock">Stock</option>
+                                <option value="Bond">Bond</option>
+                                <option value="ETF">ETF</option>
+                                <option value="Crypto">Crypto</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_current_price" class="form-label fw-bold">Current Price (₹)</label>
+                            <input type="number" step="0.01" class="form-control border-0 reports-input" id="edit_current_price" name="current_price" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_quantity" class="form-label fw-bold">Quantity</label>
+                            <input type="number" step="0.0001" class="form-control border-0 reports-input" id="edit_quantity" name="quantity" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="edit_purchase_price" class="form-label fw-bold">Purchase Price (₹)</label>
+                            <input type="number" step="0.01" class="form-control border-0 reports-input" id="edit_purchase_price" name="purchase_price" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_purchase_date" class="form-label fw-bold">Purchase Date</label>
+                        <input type="date" class="form-control border-0 reports-input" id="edit_purchase_date" name="purchase_date" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary fw-bold">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>
+{% endblock %}
