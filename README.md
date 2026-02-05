@@ -1,4 +1,4 @@
-# 💰 FinVest-Financial-Buddy - Personal Finance Management System
+# 💰 FinVest-Financial Buddy
 
 A comprehensive web-based personal finance management application built with Flask, featuring transaction tracking, portfolio management, budgeting, and detailed financial reports with interactive charts. The project integrates MySQL for database management, applies modern web development practices, and follows clean architecture principles.
 
@@ -286,3 +286,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Google Fonts**: Modern typography
 
 **Made with ❤️ for smarter financial management**
+
