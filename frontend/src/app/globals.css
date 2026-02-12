@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-grotesk: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-space-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  --color-neon-green: #7FFF00;
+  --color-neon-purple: #8A2BE2;
+  --color-neon-orange: #FFA500;
+  --color-neon-yellow: #FFD700;
+  
+  --color-bento-bg: #0a0a0a;
+  --color-bento-border: #1a1a1a;
+}
+
+@layer base {
+  body {
+    @apply bg-black text-gray-100 font-inter antialiased;
+    /* Custom Scrollbar */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 10px;
+    }
+  }
+}
+
+@layer components {
+  /* Bento Box Architecture Foundation */
+  .bento-card {
+    @apply bg-bento-bg border border-bento-border rounded-[24px] p-6 shadow-xl relative overflow-hidden;
+    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s ease;
+  }
+  
+  /* Solid Neon Blocks for Treemap style */
+  .bento-inner-block {
+    @apply rounded-[16px] p-4 text-black flex flex-col justify-between relative overflow-hidden;
+  }
+
+  /* Targeted Glassmorphism (used sparingly) */
+  .glass-panel {
+    @apply bg-black/40 backdrop-blur-md border border-white/10 shadow-2xl;
+  }
+}
+
+/* Utilities */
+.font-grotesk {
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+.font-mono {
+  font-family: var(--font-space-mono), monospace;
+}
