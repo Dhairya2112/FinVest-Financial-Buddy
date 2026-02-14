@@ -4,6 +4,10 @@
   <img src="https://img.shields.io/badge/Flask-2.3.2-blue?style=for-the-badge&logo=flask" alt="Flask">
   <img src="https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql" alt="MySQL">
   <img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python" alt="Python">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5" alt="HTML5">
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3" alt="CSS3">
+  <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap" alt="Bootstrap">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript" alt="JavaScript">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
 </p>
 
@@ -13,21 +17,69 @@
 
 ## ✨ Features
 
-- **User Authentication** - Secure registration and login system
-- **Transaction Tracking** - Track income and expenses with categories
-- **Portfolio Management** - Monitor investments (stocks, crypto, real estate, etc.)
-- **Budget Management** - Set monthly budgets with category-based allocation
-- **Event Budgeting** - Create isolated budgets for special events
-- **Reports & Analytics** - Visual charts and financial insights
-- **Modern UI** - Glassmorphism design with dark/light mode
+### 🔐 Authentication & Authorization
+- User registration and login system with secure password hashing
+- Session-based authentication
+- Admin panel for user management
+
+### 💰 Transaction Management
+- Track income and expenses with detailed categories
+- Add, edit, and delete transactions
+- Filter and search by category, date range, or amount
+- Sort transactions by date, amount, or category
+
+### 📊 Portfolio Management
+- Track investments across multiple asset types (stocks, bonds, crypto, real estate, gold, cash, vehicles)
+- Real-time P&L (Profit/Loss) calculation
+- Portfolio value history tracking
+- Asset allocation visualization with pie charts
+- Portfolio growth charts and trend analysis
+- Risk analysis and diversification scoring
+
+### 💵 Budget Management
+- Set monthly budget limits
+- Category-based budget allocation
+- Visual budget vs. actual spending comparison
+- Progress bars for budget tracking
+- Alerts when approaching budget limits
+
+### 🎉 Event-Based Budgeting
+- Create isolated budgets for special events (weddings, vacations, parties)
+- Date range-based expense tracking
+- Separate budget management per event
+- Event-specific transaction logging
+- View event performance in isolation
+
+### 📈 Reports & Analytics
+- Expense breakdown by category (interactive pie charts)
+- Income analysis by source (bar charts)
+- Monthly trends visualization
+- Net cash flow tracking
+- Interactive dashboard with real-time data
+
+### 🎨 Modern UI/UX
+- Beautiful glassmorphism design
+- Dark/Light mode toggle
+- Fully responsive design (mobile-friendly)
+- Interactive charts and visualizations
+- Intuitive navigation sidebar
+- Smooth transitions and animations
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Backend:** Flask 2.3.2
+### Backend
+- **Framework:** Flask 2.3.2
 - **Database:** MySQL 8.0+
 - **Libraries:** mysql-connector-python, Werkzeug, Matplotlib, NumPy
+
+### Frontend
+- **HTML5** - Semantic markup
+- **CSS3** - Modern styling with glassmorphism design
+- **Bootstrap 5** - Responsive grid system and components
+- **JavaScript (ES6+)** - Interactive functionality
+- **Jinja2** - Template engine (Flask built-in)
 
 ---
 
