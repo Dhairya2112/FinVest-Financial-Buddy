@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+
+{% block title %}FinVest - Welcome{% endblock %}
+
+{% block nav %}
+<nav class="navbar navbar-expand-lg fintech-navbar sticky-top glass" id="introNavbar">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#hero">
+            <i class="fas fa-chart-line me-2"></i>FinVest
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link px-3" href="#hero">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" href="#objectives">Objectives</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" href="#features">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" href="#tech-stack">Tech Stack</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" href="#concepts">Concepts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" href="#database">Database</a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link nav-link p-2 me-3" id="themeToggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary me-2 px-4 rounded-pill">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary px-4 rounded-pill">Register</a>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div data-bs-spy="scroll" data-bs-target="#introNavbar" data-bs-offset="100" class="scrollspy-example" tabindex="0">
+    <!-- Hero Section -->
+    <section id="hero" class="welcome-section text-center mb-5">
+        <div class="container">
+            <h1 class="display-3 mb-3">💰 FinVest - Financial Buddy</h1>
+            <p class="lead mb-4">A comprehensive web-based personal finance management application built with Flask.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-5 py-3">Get Started</a>
+                <a href="#features" class="btn btn-outline-secondary btn-lg px-5 py-3">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="mb-5 py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="mb-4"><i class="fas fa-info-circle me-3 text-primary"></i>Project Overview</h2>
+                    <p class="fs-5">FinVest features transaction tracking, portfolio management, budgeting, and detailed
+                        financial reports with interactive charts. The project integrates MySQL for database management,
+                        applies modern web development practices, and follows clean architecture principles.</p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card glass p-4 border-0 shadow-sm">
+                        <p class="mb-0 fs-5 font-monospace">"The system manages financial transactions, investment
+                            portfolios, budgets, special events, and generates insightful financial analytics with
+                            persistent database storage."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Objectives Section -->
+    <section id="objectives" class="mb-5 py-5 bg-light-soft rounded-4">
+        <div class="container">
+            <h2 class="text-center mb-5"><i class="fas fa-bullseye me-3 text-danger"></i>Project Objectives</h2>
+            <div class="row g-4 text-center">
+                <div class="col-md-3">
+                    <div class="objective-item p-4">
+                        <i class="fas fa-laptop-code fa-3x mb-3 text-primary"></i>
+                        <h5>Modern Tech</h5>
+                        <p>Manage personal finances using modern web technologies</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="objective-item p-4">
+                        <i class="fas fa-chart-line fa-3x mb-3 text-success"></i>
+                        <h5>Data Viz</h5>
+                        <p>Apply data visualization for financial insights</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="objective-item p-4">
+                        <i class="fas fa-database fa-3x mb-3 text-info"></i>
+                        <h5>MySQL Storage</h5>
+                        <p>Store and retrieve financial data using MySQL</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="objective-item p-4">
+                        <i class="fas fa-magic fa-3x mb-3 text-warning"></i>
+                        <h5>Glassmorphism</h5>
+                        <p>Provide intuitive user experience with glassmorphism design</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="mb-5 py-5">
+        <div class="container">
+            <h2 class="text-center mb-5"><i class="fas fa-rocket me-3 text-warning"></i>Project Features</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 glass feature-card">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="fas fa-money-bill-wave me-2 text-success"></i>Transaction
+                                Management</h4>
+                            <p class="card-text">Record and categorize all financial transactions with advanced
+                                filtering and real-time updates.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 glass feature-card">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="fas fa-chart-pie me-2 text-primary"></i>Portfolio
+                                Management</h4>
+                            <p class="card-text">Monitor stocks, cryptocurrencies, and mutual funds with performance
+                                analytics and price history.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 glass feature-card">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="fas fa-piggy-bank me-2 text-danger"></i>Budgeting</h4>
+                            <p class="card-text">Set monthly and category-specific budgets with alerts and spending
+                                analysis.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 glass feature-card">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="fas fa-calendar-check me-2 text-info"></i>Event-Based</h4>
+                            <p class="card-text">Create isolated budgets for special events like vacations or weddings
+                                with date range management.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 glass feature-card">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="fas fa-chart-bar me-2 text-warning"></i>Reports & Analytics
+                            </h4>
+                            <p class="card-text">Beautiful interactive charts generated with Matplotlib with
+                                glassmorphism theme.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 glass feature-card">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="fas fa-paint-brush me-2 text-secondary"></i>Modern UI/UX
+                            </h4>
+                            <p class="card-text">Translucent UI with backdrop blur, dark/light mode, and smooth
+                                animations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack Section -->
+    <section id="tech-stack" class="mb-5 py-5">
+        <div class="container">
+            <h2 class="text-center mb-5"><i class="fas fa-microchip me-3 text-primary"></i>Technology Stack</h2>
+            <div class="row g-4 d-flex justify-content-center">
+                <div class="col-md-4 col-lg-2">
+                    <div class="tech-card p-4 text-center glass h-100">
+                        <i class="fab fa-python fa-3x mb-3 text-primary"></i>
+                        <h6>Python</h6>
+                        <small class="text-muted">Core Language</small>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="tech-card p-4 text-center glass h-100">
+                        <i class="fas fa-flask fa-3x mb-3 text-info"></i>
+                        <h6>Flask</h6>
+                        <small class="text-muted">Web Framework</small>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="tech-card p-4 text-center glass h-100">
+                        <i class="fas fa-database fa-3x mb-3 text-success"></i>
+                        <h6>MySQL</h6>
+                        <small class="text-muted">Database</small>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="tech-card p-4 text-center glass h-100">
+                        <i class="fab fa-bootstrap fa-3x mb-3 text-purple"></i>
+                        <h6>Bootstrap 5</h6>
+                        <small class="text-muted">UI Framework</small>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="tech-card p-4 text-center glass h-100">
+                        <i class="fas fa-chart-area fa-3x mb-3 text-warning"></i>
+                        <h6>Matplotlib</h6>
+                        <small class="text-muted">Analytics</small>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="tech-card p-4 text-center glass h-100">
+                        <i class="fab fa-js fa-3x mb-3 text-warning"></i>
+                        <h6>JavaScript</h6>
+                        <small class="text-muted">Interactivity</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Concepts Section -->
+    <section id="concepts" class="mb-5 py-5 bg-light-soft rounded-4">
+        <div class="container">
+            <h2 class="text-center mb-5"><i class="fas fa-brain me-3 text-info"></i>Key Concepts Applied</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-5">
+                    <div class="card glass border-0 shadow-sm h-100 no-tilt">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="concept-icon bg-primary-soft me-3">
+                                    <i class="fas fa-code-branch text-primary"></i>
+                                </div>
+                                <h4 class="mb-0">Data & Algorithms</h4>
+                            </div>
+                            <ul class="list-group list-group-flush bg-transparent">
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-3"></i>
+                                    <span>Array Management (Transaction lists)</span>
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-3"></i>
+                                    <span>Sorting (Date, Amount, Category)</span>
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-3"></i>
+                                    <span>Efficient Search Algorithms</span>
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-3"></i>
+                                    <span>Data Aggregation & Real-time Math</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card glass border-0 shadow-sm h-100 no-tilt">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="concept-icon bg-success-soft me-3">
+                                    <i class="fas fa-layer-group text-success"></i>
+                                </div>
+                                <h4 class="mb-0">System Architecture</h4>
+                            </div>
+                            <ul class="list-group list-group-flush bg-transparent">
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-3"></i>
+                                    <span>MVC (Model-View-Controller) Design</span>
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-3"></i>
+                                    <span>Modular Blueprints for Scalability</span>
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-3"></i>
+                                    <span>Database Normalization Principles</span>
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-3"></i>
+                                    <span>Authentication & Authorization Security</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Database Design Section -->
+    <section id="database" class="mb-5 py-5">
+        <div class="container">
+            <h2 class="text-center mb-5"><i class="fas fa-database me-3 text-secondary"></i>Database Design (SQL)</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card glass h-100">
+                        <div class="card-body">
+                            <h5>Tables</h5>
+                            <small class="text-muted">Users, Transactions, Portfolio Assets, Budgets, Category Budgets,
+                                Events, Event Transactions</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card glass h-100">
+                        <div class="card-body">
+                            <h5>SQL Concepts</h5>
+                            <small class="text-muted">Constraints, JOINs, GROUP BY, Foreign Keys, Indexing</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card glass h-100">
+                        <div class="card-body">
+                            <h5>Connection</h5>
+                            <small class="text-muted">mysql-connector-python</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="mb-5 py-5 text-center">
+        <div class="container">
+            <div class="glass p-5 rounded-5">
+                <h2 class="display-5 mb-4">Start Managing Your Wealth Like a Pro</h2>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-5">Sign Up Now</a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg px-5">Login</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Add footer here since we overrode block nav and technically following project flow -->
+<footer class="footer mt-auto py-5 glass border-top-0">
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2026 FinVest. Personal Finance Management System.</p>
+        <p class="mb-0 small text-muted">Built with ♥ by the Finvest Team</p>
+    </div>
+</footer>
+{% endblock %}

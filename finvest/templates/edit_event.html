@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Edit {{ event.name }} - FinVest{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4 mb-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h1 class="display-5 fw-bold mb-2">Edit Event</h1>
+                    <p class="text-muted fs-5">{{ event.name }}</p>
+                </div>
+                <a href="{{ url_for('events.event_detail', event_id=event.id) }}" class="btn btn-outline-secondary fw-bold">
+                    <i class="fas fa-arrow-left me-2"></i>Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="row mb-5">
+        <div class="col-lg-6 offset-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <form method="POST" action="{{ url_for('events.edit_event', event_id=event.id) }}" class="row g-3">
+                        <!-- Event Name -->
+                        <div class="col-12">
+                            <label for="eventName" class="form-label fw-bold">Event Name *</label>
+                            <input type="text" class="form-control border-0 reports-input" id="eventName" name="name" value="{{ event.name }}" required>
+                        </div>
+
+                        <!-- Start Date -->
+                        <div class="col-md-6">
+                            <label for="startDate" class="form-label fw-bold">Start Date *</label>
+                            <input type="date" class="form-control border-0 reports-input" id="startDate" name="start_date" value="{{ event.start_date }}" required>
+                        </div>
+
+                        <!-- End Date -->
+                        <div class="col-md-6">
+                            <label for="endDate" class="form-label fw-bold">End Date *</label>
+                            <input type="date" class="form-control border-0 reports-input" id="endDate" name="end_date" value="{{ event.end_date }}" required>
+                        </div>
+
+                        <!-- Budget -->
+                        <div class="col-12">
+                            <label for="eventBudget" class="form-label fw-bold">Total Budget (₹) *</label>
+                            <input type="number" step="0.01" min="0" class="form-control border-0 reports-input" id="eventBudget" name="target_amount" value="{{ event.budget or 0 }}" required>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="col-12 d-flex gap-2 justify-content-end">
+                            <a href="{{ url_for('events.event_detail', event_id=event.id) }}" class="btn btn-outline-secondary fw-bold">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary fw-bold">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

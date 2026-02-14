@@ -1,0 +1,59 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}User Management - FinVest Admin{% endblock %}
+{% block header_title %}User Directory{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-light-glass p-2 rounded-circle me-3">
+                                <i class="fas fa-user text-primary"></i>
+                            </div>
+                            <span class="fw-bold">{{ user.name }}</span>
+                        </div>
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.is_admin %}
+                        <span class="badge bg-primary text-uppercase">Admin</span>
+                        {% else %}
+                        <span class="badge bg-secondary text-uppercase">User</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.created_at.strftime('%b %d, %Y') if user.created_at else 'N/A' }}</td>
+                    <td class="text-end">
+                        {% if not user.is_admin %}
+                        <form action="{{ url_for('admin.promote') }}" method="POST" class="d-inline">
+                            <input type="hidden" name="email" value="{{ user.email }}">
+                            <button type="submit" class="btn btn-sm btn-outline-primary"
+                                onclick="return confirm('Promote this user to Admin?')">
+                                Promote
+                            </button>
+                        </form>
+                        {% endif %}
+                        <button class="btn btn-sm btn-link text-muted" title="View Details">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
