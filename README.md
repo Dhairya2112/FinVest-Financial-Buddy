@@ -122,7 +122,6 @@ finvest/
 ├── models.py                   # Data models and business logic
 ├── validators.py               # Input validation utilities
 ├── requirements.txt            # Python dependencies
-├── README.md                   # Project documentation
 ├── database/
 │   └── finvest.sql            # Database schema and sample data
 ├── routes/
