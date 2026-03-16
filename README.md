@@ -187,7 +187,7 @@ finvest/
 
 ---
 
-## 📄 License
+##<a href="https://github.com/Dhairya2112/FinVest-Financial-Buddy/blob/main/LICENSE">📄 License</a>
 
 MIT License - See LICENSE file for details.
 
