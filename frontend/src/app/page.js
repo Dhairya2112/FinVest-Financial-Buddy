@@ -102,7 +102,7 @@ function Interactive3DNode() {
 
   return (
     <div 
-      className="w-full h-full min-h-[400px] lg:min-h-[500px] flex items-center justify-center relative cursor-crosshair"
+      className="w-full h-full min-h-[300px] sm:min-h-[400px] lg:min-h-[500px] flex items-center justify-center relative cursor-crosshair"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ perspective: 1500 }}
@@ -205,13 +205,13 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto pb-4">
-            <Link href="/register" className="w-full sm:w-auto">
+            <Link href="/register" className="w-full sm:w-auto block">
               <button className="w-full sm:w-auto px-10 py-4 bg-[var(--color-neon-green)] text-black font-bold rounded-md transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-lg shadow-[0_0_20px_rgba(127,255,0,0.15)]">
                 Deploy Workspace
                 <ArrowRight className="w-5 h-5" />
               </button>
             </Link>
-            <Link href="/login" className="w-full sm:w-auto">
+            <Link href="/login" className="w-full sm:w-auto block">
               <button className="w-full sm:w-auto px-10 py-4 bg-[#111113] text-white font-medium rounded-md border border-white/10 transition-all hover:bg-white/10 active:scale-95 text-lg flex items-center justify-center">
                 Access Terminal
               </button>
