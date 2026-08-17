@@ -24,7 +24,7 @@ export const metadata = {
   title: "FinVest - NextGen Finance",
   description: "Industry-grade personal finance management",
   icons: {
-    icon: "/icon.png?v=2"
+    icon: "/icon.png?v=3"
   }
 };
 
