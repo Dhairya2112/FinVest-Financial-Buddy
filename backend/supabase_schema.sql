@@ -2,7 +2,7 @@
 -- This replaces the old MySQL database. Paste this into the Supabase SQL Editor and hit 'Run'.
 
 -- 1. Users Table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,          -- Encrypted via AES-256 in Python
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE users (
 );
 
 -- 2. Transactions Table
-CREATE TABLE transactions (
+CREATE TABLE IF NOT EXISTS transactions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     amount TEXT NOT NULL,        -- Encrypted string representing a float
@@ -24,7 +24,7 @@ CREATE TABLE transactions (
 );
 
 -- 3. Budgets Table
-CREATE TABLE budgets (
+CREATE TABLE IF NOT EXISTS budgets (
     id SERIAL PRIMARY KEY,
     user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     monthly_budget TEXT NOT NULL, -- Encrypted float
@@ -32,7 +32,7 @@ CREATE TABLE budgets (
 );
 
 -- 4. Category Budgets Table
-CREATE TABLE category_budgets (
+CREATE TABLE IF NOT EXISTS category_budgets (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     category VARCHAR(255) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE category_budgets (
 );
 
 -- 5. Portfolio Assets Table
-CREATE TABLE portfolio_assets (
+CREATE TABLE IF NOT EXISTS portfolio_assets (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     name TEXT NOT NULL,          -- Encrypted
@@ -62,7 +62,7 @@ CREATE TABLE portfolio_assets (
 );
 
 -- 6. Portfolio History Table
-CREATE TABLE portfolio_history (
+CREATE TABLE IF NOT EXISTS portfolio_history (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     asset_id INTEGER REFERENCES portfolio_assets(id) ON DELETE CASCADE,
@@ -71,7 +71,7 @@ CREATE TABLE portfolio_history (
 );
 
 -- 7. Events Table
-CREATE TABLE events (
+CREATE TABLE IF NOT EXISTS events (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     name TEXT NOT NULL,          -- Encrypted
@@ -83,7 +83,7 @@ CREATE TABLE events (
 );
 
 -- 8. Event Transactions Table
-CREATE TABLE event_transactions (
+CREATE TABLE IF NOT EXISTS event_transactions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     event_id INTEGER REFERENCES events(id) ON DELETE CASCADE,
@@ -96,16 +96,16 @@ CREATE TABLE event_transactions (
 );
 
 -- Create Indexes for performance
-CREATE INDEX idx_transactions_user_id ON transactions(user_id);
-CREATE INDEX idx_portfolio_user_id ON portfolio_assets(user_id);
-CREATE INDEX idx_events_user_id ON events(user_id);
+CREATE INDEX IF NOT EXISTS idx_transactions_user_id ON transactions(user_id);
+CREATE INDEX IF NOT EXISTS idx_portfolio_user_id ON portfolio_assets(user_id);
+CREATE INDEX IF NOT EXISTS idx_events_user_id ON events(user_id);
 
 -- 9. OTP Requests Table (Passwordless Auth)
-CREATE TABLE otp_requests (
+CREATE TABLE IF NOT EXISTS otp_requests (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     otp_code VARCHAR(10) NOT NULL,
     expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-CREATE INDEX idx_otp_email ON otp_requests(email);
+CREATE INDEX IF NOT EXISTS idx_otp_email ON otp_requests(email);

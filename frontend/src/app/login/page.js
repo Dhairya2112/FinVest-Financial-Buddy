@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,38 @@ export default function Login() {
   
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [countdown, setCountdown] = useState(60);
+
+  useEffect(() => {
+    let timer;
+    if (step === 1 && countdown > 0) {
+      timer = setInterval(() => setCountdown((prev) => prev - 1), 1000);
+    }
+    return () => clearInterval(timer);
+  }, [step, countdown]);
+
+  const handleResendOtp = async () => {
+    if (countdown > 0) return;
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch((process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000") + "/api/auth/request-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "login" }),
+      });
+      const data = await res.json();
+      if (res.ok && data.status === "success") {
+        setCountdown(60);
+      } else {
+        setError(data.message || "Failed to resend code.");
+      }
+    } catch (err) {
+      setError("Network Error: " + (err.message || "Failed to fetch"));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const requestOtp = async (e) => {
     e.preventDefault();
@@ -205,11 +237,22 @@ export default function Login() {
                       </div>
                     </div>
 
-                    <button 
-                      type="submit"
-                      disabled={loading || otp.length < 6}
-                      className="w-full py-4 mt-2 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 text-sm font-inter"
-                    >
+                      <div className="flex justify-between items-center mt-6">
+                        <button 
+                          type="button" 
+                          onClick={handleResendOtp}
+                          disabled={countdown > 0 || loading}
+                          className="text-xs font-mono text-gray-500 hover:text-[var(--color-neon-green)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {countdown > 0 ? `Resend Code in ${countdown}s` : "Resend Code"}
+                        </button>
+                      </div>
+
+                      <button 
+                        type="submit"
+                        disabled={loading || otp.length < 6}
+                        className="w-full py-4 mt-2 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 text-sm font-inter"
+                      >
                       {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Authorize Entry <CheckCircle2 className="w-4 h-4" /></>} 
                     </button>
                   </form>

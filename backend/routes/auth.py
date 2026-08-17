@@ -6,8 +6,7 @@ import datetime
 import os
 import random
 import string
-import smtplib
-from email.mime.text import MIMEText
+import requests
 from repositories.otp_repository import OtpRepository
 
 auth_bp = Blueprint('auth', __name__)
@@ -24,35 +23,29 @@ def generate_token(user_id):
     return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
 def send_otp_email(to_email, otp_code):
-    smtp_server = os.environ.get('SMTP_SERVER')
-    smtp_port = int(os.environ.get('SMTP_PORT', 587))
-    smtp_user = os.environ.get('SMTP_USERNAME')
-    smtp_pass = os.environ.get('SMTP_PASSWORD')
-
-    if not smtp_server or not smtp_user or not smtp_pass:
-        print(f"WARNING: SMTP not configured. OTP for {to_email} is {otp_code}")
+    resend_api_key = os.environ.get('RESEND_API_KEY')
+    if not resend_api_key:
+        print("WARNING: RESEND_API_KEY missing. Cannot send OTP.")
         return True
-
-    msg = MIMEText(
-        f"Your FinVest verification code is: {otp_code}\n\n"
-        f"This code will expire in 10 minutes.\n\n"
-        f"- FinVest System\n\n"
-        f"------------------------\n"
-        f"FinVest is proudly designed and engineered by Dhairya Dave."
-    )
-    msg['Subject'] = 'FinVest Terminal Verification Code'
-    msg['From'] = f"FinVest System <{smtp_user}>"
-    msg['To'] = to_email
-
+    
+    url = "https://api.resend.com/emails"
+    headers = {
+        "Authorization": f"Bearer {resend_api_key}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "from": "FinVest Security <onboarding@resend.dev>",
+        "to": [to_email],
+        "subject": "FinVest Terminal Verification Code",
+        "html": f"<p>Your FinVest verification code is: <strong style='font-size: 24px;'>{otp_code}</strong></p><p>This code will expire in 10 minutes.</p>"
+    }
+    
     try:
-        server = smtplib.SMTP(smtp_server, smtp_port, timeout=5)
-        server.starttls()
-        server.login(smtp_user, smtp_pass)
-        server.send_message(msg)
-        server.quit()
+        response = requests.post(url, headers=headers, json=data, timeout=10)
+        response.raise_for_status()
         return True
     except Exception as e:
-        print(f"Failed to send email to {to_email}: {e}")
+        print(f"Failed to send email via Resend: {e}")
         return False
 
 @auth_bp.route('/api/auth/request-otp', methods=['POST'])
