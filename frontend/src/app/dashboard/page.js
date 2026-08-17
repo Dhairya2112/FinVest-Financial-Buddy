@@ -63,12 +63,16 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center">
-        <motion.div 
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          className="w-12 h-12 border-4 border-white/20 border-t-[var(--color-neon-green)] rounded-full"
-        />
+      <div className="max-w-5xl mx-auto px-6 pt-24 pb-32 animate-pulse space-y-8">
+        <div className="flex justify-between items-end mb-12">
+           <div className="space-y-4"><div className="w-64 h-12 bg-white/5 rounded-xl" /><div className="w-32 h-4 bg-white/5 rounded-full" /></div>
+           <div className="w-48 h-10 bg-white/5 rounded-full hidden md:block" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+           <div className="md:col-span-2 h-[280px] bg-white/5 rounded-3xl" />
+           <div className="h-[280px] bg-white/5 rounded-3xl" />
+        </div>
+        <div className="w-full h-[300px] bg-white/5 rounded-3xl" />
       </div>
     );
   }

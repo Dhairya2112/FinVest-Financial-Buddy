@@ -143,8 +143,17 @@ export default function Tracker() {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-24 pb-12 px-6 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-white/20 border-t-[var(--color-neon-yellow)] rounded-full animate-spin" />
+      <div className="max-w-6xl mx-auto pt-24 pb-12 px-6 animate-pulse space-y-8">
+        <div className="space-y-4">
+          <div className="w-72 h-12 bg-white/5 rounded-xl" />
+          <div className="w-48 h-4 bg-white/5 rounded-full" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="h-[120px] bg-white/5 rounded-2xl" />
+          <div className="h-[120px] bg-white/5 rounded-2xl" />
+          <div className="h-[120px] bg-white/5 rounded-2xl" />
+        </div>
+        <div className="w-full h-[400px] bg-white/5 rounded-3xl mt-8" />
       </div>
     );
   }

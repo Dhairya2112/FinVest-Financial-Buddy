@@ -23,6 +23,9 @@ const inter = Inter({
 export const metadata = {
   title: "FinVest - NextGen Finance",
   description: "Industry-grade personal finance management",
+  icons: {
+    icon: "/icon.png?v=2"
+  }
 };
 
 export default function RootLayout({ children }) {

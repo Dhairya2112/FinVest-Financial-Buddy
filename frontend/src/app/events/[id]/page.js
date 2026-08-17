@@ -113,9 +113,14 @@ export default function EventDetails() {
   };
 
   if (loading) return (
-    <div className="min-h-screen pt-24 pb-12 flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-t-[var(--color-neon-yellow)] border-white/20 rounded-full animate-spin" />
-    </div>
+      <div className="max-w-5xl mx-auto pt-24 pb-12 px-6 animate-pulse space-y-8">
+        <div className="space-y-4">
+          <div className="w-16 h-4 bg-white/5 rounded-full mb-6" />
+          <div className="w-72 h-12 bg-white/5 rounded-xl" />
+          <div className="w-48 h-4 bg-white/5 rounded-full" />
+        </div>
+        <div className="w-full h-[400px] bg-white/5 rounded-3xl" />
+      </div>
   );
 
   return (
