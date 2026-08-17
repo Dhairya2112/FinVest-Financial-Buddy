@@ -37,7 +37,25 @@ def send_otp_email(to_email, otp_code):
         "from": "FinVest Security <onboarding@resend.dev>",
         "to": [to_email],
         "subject": "FinVest Terminal Verification Code",
-        "html": f"<p>Your FinVest verification code is: <strong style='font-size: 24px;'>{otp_code}</strong></p><p>This code will expire in 10 minutes.</p>"
+        "html": f"""
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #050505; color: #ffffff; padding: 40px; border-radius: 12px; border: 1px solid #1a1a1a;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 2px;">FINVEST TERMINAL</h1>
+          </div>
+          <div style="background-color: #111111; padding: 30px; border-radius: 8px; border: 1px solid #222222; text-align: center;">
+            <p style="margin: 0 0 15px 0; color: #888888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Secure Authorization Code</p>
+            <p style="margin: 0; font-size: 36px; font-family: monospace; font-weight: bold; color: #7FFF00; letter-spacing: 8px;">{otp_code}</p>
+          </div>
+          <p style="color: #666666; font-size: 14px; line-height: 1.6; text-align: center; margin-top: 30px;">
+            This access code will expire in 10 minutes. If you did not request this authorization, please secure your account.
+          </p>
+          <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #1a1a1a; text-align: center;">
+            <p style="margin: 0; color: #444444; font-size: 11px; font-family: monospace; text-transform: uppercase; letter-spacing: 1px;">
+              Engineered & Developed by Dhairya Dave
+            </p>
+          </div>
+        </div>
+        """
     }
     
     try:
