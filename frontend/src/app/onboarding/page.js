@@ -77,7 +77,7 @@ export default function Onboarding() {
         
         const baseBudget = parseCurrency(budget);
         
-        await fetch("http://localhost:5000/api/budget/set", {
+        await fetch((process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000") + "/api/budget/set", {
           method: "POST",
           headers: { 
             "Content-Type": "application/json",

@@ -95,7 +95,7 @@ export default function EventsPage() {
         router.push("/login");
         return;
       }
-      const res = await fetch("http://localhost:5000/api/events", {
+      const res = await fetch((process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000") + "/api/events", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.status === 401) {
@@ -120,7 +120,7 @@ export default function EventsPage() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("finvest_token");
-      const res = await fetch("http://localhost:5000/api/events/add", {
+      const res = await fetch((process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000") + "/api/events/add", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

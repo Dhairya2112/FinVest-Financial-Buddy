@@ -54,7 +54,7 @@ export default function Navigation() {
   const handleExportData = async () => {
     try {
       const token = localStorage.getItem("finvest_token");
-      const res = await fetch("http://localhost:5000/api/transactions", {
+      const res = await fetch((process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000") + "/api/transactions", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const json = await res.json();
