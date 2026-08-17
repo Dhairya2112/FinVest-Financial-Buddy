@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning
         className={`${spaceGrotesk.variable} ${spaceMono.variable} ${inter.variable} antialiased bg-black text-white font-inter`}
       >
-        <div className="relative min-h-screen overflow-hidden">
+        <div className="relative flex flex-col min-h-[100dvh] overflow-hidden">
            <TopographicBackground />
            <Navigation />
            <main className="relative z-10 w-full flex-1 pb-24 md:pb-0">

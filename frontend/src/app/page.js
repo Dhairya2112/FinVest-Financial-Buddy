@@ -172,7 +172,7 @@ function Interactive3DNode() {
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col bg-[#030303] selection:bg-[var(--color-neon-green)] selection:text-black min-h-screen font-inter text-white overflow-x-hidden">
+    <div className="flex flex-col flex-1 h-full bg-[#030303] selection:bg-[var(--color-neon-green)] selection:text-black font-inter text-white overflow-x-hidden">
       
       <GlowBackground />
 
