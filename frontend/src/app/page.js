@@ -51,7 +51,7 @@ function FeatureBlock({ title, description, badge, reverse = false, children }) 
     <motion.div 
       initial={{ opacity: 0, y: 100, scale: 0.95 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: false, margin: "-10%" }}
+      viewport={{ once: true, margin: "-10%" }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={`flex flex-col ${reverse ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-12 lg:gap-24 py-16 md:py-24 border-b border-white/5 last:border-0`}
     >
@@ -122,7 +122,7 @@ function Interactive3DNode() {
 
         {/* Back Layer: Blurred Frosted Glass */}
         <div 
-          className="absolute w-64 h-40 bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl"
+          className="absolute w-64 h-40 bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl"
           style={{ transform: "translateZ(-50px) rotateZ(-10deg) rotateX(10deg)" }}
         />
 
@@ -151,7 +151,7 @@ function Interactive3DNode() {
 
         {/* Front Layer: Floating Data Widget */}
         <div 
-          className="absolute right-[-30px] bottom-[-20px] w-52 h-24 bg-white/[0.05] backdrop-blur-2xl border border-white/10 rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.5)] p-4 flex flex-col justify-between"
+          className="absolute right-[-30px] bottom-[-20px] w-52 h-24 bg-white/[0.05] backdrop-blur-lg border border-white/10 rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.5)] p-4 flex flex-col justify-between"
           style={{ transform: "translateZ(100px)" }}
         >
           <div className="flex justify-between items-center">
