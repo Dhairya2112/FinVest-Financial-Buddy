@@ -195,7 +195,17 @@ export default function EventsPage() {
             <p className="font-inter text-white/50">Manage isolated budgets for trips, projects, or special events.</p>
           </div>
           <button 
-            onClick={() => setIsAdding(!isAdding)}
+            onClick={() => {
+              if (isAdding) {
+                setIsAdding(false);
+                setName("");
+                setBudget("");
+                setStartDate("");
+                setEndDate("");
+              } else {
+                setIsAdding(true);
+              }
+            }}
             className="px-6 py-3 bg-[var(--color-neon-yellow)] text-black font-grotesk font-bold rounded-full hover:bg-opacity-80 transition-colors flex items-center gap-2 self-start md:self-auto"
           >
             {isAdding ? "Cancel" : <><Plus className="w-5 h-5" /> New Event</>}
@@ -360,7 +370,11 @@ export default function EventsPage() {
                           <h4 className="font-grotesk font-bold text-xl text-white flex items-center gap-2">
                             <Zap className="w-5 h-5 text-[var(--color-neon-yellow)]" /> Quick Log
                           </h4>
-                          <button onClick={() => setQuickLogEventId(null)} className="text-white/50 hover:text-white p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
+                          <button onClick={() => {
+                            setQuickLogEventId(null);
+                            setQuickAmount("");
+                            setQuickDesc("");
+                          }} className="text-white/50 hover:text-white p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
                             <X className="w-4 h-4" />
                           </button>
                         </div>

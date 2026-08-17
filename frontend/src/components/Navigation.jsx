@@ -97,7 +97,7 @@ export default function Navigation() {
         {!isAuthOrLanding && (
           <div className="hidden md:flex items-center gap-1 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full p-1 pointer-events-auto shadow-2xl">
             {navItems.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
               const Icon = item.icon;
               
               return (
@@ -188,10 +188,13 @@ export default function Navigation() {
 
       {/* Mobile Bottom Tab Navigation */}
       {!isAuthOrLanding && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#060608]/95 backdrop-blur-xl border-t border-white/10 px-4 pt-3 pb-8 shadow-[0_-20px_40px_rgba(0,0,0,0.8)] pointer-events-auto">
+        <div 
+          className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#060608]/95 backdrop-blur-xl border-t border-white/10 px-4 pt-3 shadow-[0_-20px_40px_rgba(0,0,0,0.8)] pointer-events-auto"
+          style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
+        >
           <div className="flex items-center justify-between">
             {navItems.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
               const Icon = item.icon;
               return (
                 <Link

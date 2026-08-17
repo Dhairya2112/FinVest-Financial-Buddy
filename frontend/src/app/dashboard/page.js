@@ -193,7 +193,7 @@ export default function Dashboard() {
               <div className="font-mono text-xs text-[var(--color-neon-green)] font-bold uppercase tracking-wider flex items-center gap-1 mb-2">
                 <ArrowUpRight className="w-4 h-4" /> Income
               </div>
-              <div className="font-grotesk text-3xl font-bold tracking-tight text-white">
+              <div className="font-grotesk text-2xl sm:text-3xl font-bold tracking-tight text-white truncate">
                 {formatCurrency(data.metrics.monthly_income, 0)}
               </div>
             </div>
@@ -202,7 +202,7 @@ export default function Dashboard() {
               <div className="font-mono text-xs text-[var(--color-neon-orange)] font-bold uppercase tracking-wider flex items-center gap-1 mb-2">
                 <ArrowDownRight className="w-4 h-4" /> Expenses
               </div>
-              <div className="font-grotesk text-3xl font-bold tracking-tight text-white">
+              <div className="font-grotesk text-2xl sm:text-3xl font-bold tracking-tight text-white truncate">
                 {formatCurrency(data.metrics.monthly_expenses, 0)}
               </div>
             </div>
