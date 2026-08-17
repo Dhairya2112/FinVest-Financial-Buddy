@@ -2,6 +2,7 @@ import { Space_Grotesk, Space_Mono, Inter } from "next/font/google";
 import TopographicBackground from "@/components/TopographicBackground";
 import Navigation from "@/components/Navigation";
 import GlobalQuickActions from "@/components/GlobalQuickActions";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -43,6 +44,7 @@ export default function RootLayout({ children }) {
            </main>
            <GlobalQuickActions />
         </div>
+        <Analytics />
       </body>
     </html>
   );
