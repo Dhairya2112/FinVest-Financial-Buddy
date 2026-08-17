@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
         <div className="relative flex flex-col min-h-[100dvh] overflow-hidden">
            <TopographicBackground />
            <Navigation />
-           <main className="relative z-10 w-full flex-1 pb-24 md:pb-0">
+           <main className="relative z-10 w-full flex-1">
               {children}
            </main>
            <GlobalQuickActions />

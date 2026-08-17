@@ -190,9 +190,15 @@ export default function Navigation() {
 
       {/* Mobile Bottom Tab Navigation */}
       {!isAuthOrLanding && (
-        <div 
-          className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#060608]/95 backdrop-blur-xl border-t border-white/10 px-4 pt-3 pb-6 shadow-[0_-20px_40px_rgba(0,0,0,0.8)] pointer-events-auto"
-        >
+        <>
+          <style>{`
+            @media (max-width: 767px) {
+              main { padding-bottom: 6rem !important; }
+            }
+          `}</style>
+          <div 
+            className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#060608]/95 backdrop-blur-xl border-t border-white/10 px-4 pt-3 pb-6 shadow-[0_-20px_40px_rgba(0,0,0,0.8)] pointer-events-auto"
+          >
           <div className="flex items-center justify-between">
             <LayoutGroup id="mobile-nav">
             {navItems.map((item) => {
@@ -221,6 +227,7 @@ export default function Navigation() {
             </LayoutGroup>
           </div>
         </div>
+        </>
       )}
     </>
   );
