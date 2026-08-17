@@ -345,6 +345,13 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
+      {/* 4. FOOTER */}
+      <footer className="relative z-20 border-t border-white/10 py-6 text-center bg-black/50 backdrop-blur-md">
+        <p className="font-mono text-[10px] text-white/40 tracking-widest uppercase">
+          Engineered by <a href="https://www.linkedin.com/in/dhairya-dave/" target="_blank" rel="noopener noreferrer" className="text-[var(--color-neon-green)] hover:text-white transition-colors">Dhairya Dave</a>
+        </p>
+      </footer>
+
     </div>
   );
 }
