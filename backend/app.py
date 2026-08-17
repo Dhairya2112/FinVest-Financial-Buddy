@@ -3,8 +3,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-# Enable CORS for Next.js with credentials support
-CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://localhost:3001"])
+# Enable CORS for all origins since JWTs are passed via Authorization headers
+CORS(app, resources={r"/*": {"origins": "*"}})
 from dotenv import load_dotenv
 
 # Load from the backend directory specifically
