@@ -45,7 +45,7 @@ def send_otp_email(to_email, otp_code):
     msg['To'] = to_email
 
     try:
-        server = smtplib.SMTP(smtp_server, smtp_port)
+        server = smtplib.SMTP(smtp_server, smtp_port, timeout=5)
         server.starttls()
         server.login(smtp_user, smtp_pass)
         server.send_message(msg)
