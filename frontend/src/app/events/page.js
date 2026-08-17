@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Hammer, Plus, Calendar as CalendarIcon, Trash2, ArrowRight, Plane, X, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { formatCurrency, parseCurrency, getCurrencySymbol } from "@/utils/currency";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 
 export default function EventsPage() {
@@ -61,7 +62,7 @@ export default function EventsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({
-          amount: parseFloat(quickAmount),
+          amount: parseCurrency(quickAmount),
           type: "expense",
           date: new Date().toISOString().split('T')[0],
           category: quickDesc || "Quick Log",
@@ -128,7 +129,7 @@ export default function EventsPage() {
         },
         body: JSON.stringify({
           name,
-          budget: parseFloat(budget),
+          budget: parseCurrency(budget),
           start_date: startDate,
           end_date: endDate
         })
@@ -290,11 +291,11 @@ export default function EventsPage() {
                       <div>
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-1">Spent</p>
                         <p className="font-grotesk text-4xl font-bold text-white leading-none">
-                          ${ev.current_amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                          {formatCurrency(ev.current_amount)}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-inter text-sm text-white/50">of ${ev.budget.toLocaleString()}</p>
+                        <p className="font-inter text-sm text-white/50">of {formatCurrency(ev.budget)}</p>
                       </div>
                     </div>
                     
@@ -309,7 +310,7 @@ export default function EventsPage() {
                       <div className="flex items-center gap-2 bg-black/40 border border-white/10 p-3 rounded-xl mt-4">
                         <Zap className="w-4 h-4 text-[var(--color-neon-green)]" />
                         <span className="font-mono text-[10px] text-white/50 uppercase tracking-widest flex-1">Trip Pace Allowance</span>
-                        <span className="font-mono font-bold text-[var(--color-neon-green)]">${dailyAllowance.toFixed(2)}/day</span>
+                        <span className="font-mono font-bold text-[var(--color-neon-green)]">{formatCurrency(dailyAllowance)}/day</span>
                       </div>
                     )}
                   </div>
@@ -360,7 +361,7 @@ export default function EventsPage() {
                         <form onSubmit={(e) => submitQuickLog(e, id)} className="space-y-4">
                           <div>
                             <div className="relative">
-                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 font-mono">$</span>
+                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 font-mono">{getCurrencySymbol()}</span>
                               <input required type="number" step="0.01" min="0.01" value={quickAmount} onChange={e=>setQuickAmount(e.target.value)} placeholder="0.00" className="w-full bg-black/50 border border-white/20 rounded-xl py-3 pl-8 pr-4 font-mono font-bold text-white text-lg outline-none focus:border-[var(--color-neon-yellow)]" autoFocus />
                             </div>
                           </div>

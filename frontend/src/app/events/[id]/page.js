@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Plus, Activity, Trash2, ArrowUpRight, ArrowDownRight, DollarSign } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
+import { formatCurrency, parseCurrency, getCurrencySymbol } from "@/utils/currency";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 
 export default function EventDetails() {
@@ -61,7 +62,7 @@ export default function EventDetails() {
           "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
-          amount: parseFloat(amount),
+          amount: parseCurrency(amount),
           type: transactionType,
           category,
           date: new Date().toISOString().split('T')[0],
@@ -163,7 +164,7 @@ export default function EventDetails() {
                   <div>
                     <label className="text-xs font-mono text-white/40 uppercase mb-1 block">Amount</label>
                     <div className="relative">
-                      <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-white/40">{getCurrencySymbol()}</span>
                       <input required type="number" step="0.01" value={amount} onChange={e=>setAmount(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white outline-none focus:border-[var(--color-neon-yellow)]" placeholder="0.00" />
                     </div>
                   </div>
@@ -224,7 +225,7 @@ export default function EventDetails() {
                       <td className={`py-4 text-right font-grotesk font-bold text-lg ${
                         tx.type === 'income' ? 'text-[var(--color-neon-green)]' : 'text-white'
                       }`}>
-                        {tx.type === 'income' ? '+' : '-'}${parseFloat(tx.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                        {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                       </td>
                       <td className="py-4 pr-4 text-right">
                         <button onClick={() => confirmDelete(id)} className="p-2 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors inline-block">

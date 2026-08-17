@@ -361,9 +361,9 @@ export default function Splitter() {
                       ))}
                     </AnimatePresence>
                   </div>
-                  <form onSubmit={addOperator} className="flex gap-2 max-w-sm">
-                    <input type="text" value={newOperator} onChange={(e) => setNewOperator(e.target.value)} placeholder="Add a friend..." className="flex-1 bg-transparent border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-[var(--color-neon-orange)]" />
-                    <button type="submit" className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-colors">Add</button>
+                  <form onSubmit={addOperator} className="flex flex-col sm:flex-row gap-2 w-full max-w-sm">
+                    <input type="text" value={newOperator} onChange={(e) => setNewOperator(e.target.value)} placeholder="Add a friend..." className="flex-1 min-w-0 bg-transparent border border-white/10 rounded-xl px-4 py-3 sm:py-2 text-white outline-none focus:border-[var(--color-neon-orange)]" />
+                    <button type="submit" className="px-6 py-3 sm:py-2 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-colors">Add</button>
                   </form>
                 </div>
 

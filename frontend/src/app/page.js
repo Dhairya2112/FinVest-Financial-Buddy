@@ -109,7 +109,7 @@ function Interactive3DNode() {
     >
       <motion.div
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative w-72 h-72 flex items-center justify-center animate-[float_8s_ease-in-out_infinite]"
+        className="relative w-72 h-72 flex items-center justify-center animate-[float_8s_ease-in-out_infinite] scale-[0.65] sm:scale-100"
       >
         {/* Ambient Premium Glow (Soft Blue/Purple) */}
         <div className="absolute w-[120%] h-[120%] bg-gradient-to-tr from-indigo-500/10 via-purple-500/10 to-transparent blur-[80px] rounded-full" style={{ transform: "translateZ(-150px)" }} />

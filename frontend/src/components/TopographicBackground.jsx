@@ -31,8 +31,12 @@ export default function TopographicBackground() {
     window.addEventListener("mouseout", handleMouseLeave);
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     
     window.addEventListener("resize", resize);
@@ -52,15 +56,18 @@ export default function TopographicBackground() {
       smoothMouse.x += (targetMouse.x - smoothMouse.x) * 0.05;
       smoothMouse.y += (targetMouse.y - smoothMouse.y) * 0.05;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const logicalWidth = window.innerWidth;
+      const logicalHeight = window.innerHeight;
+      
+      ctx.clearRect(0, 0, logicalWidth, logicalHeight);
       
       // Pitch black background for high contrast elegance
       ctx.fillStyle = "#020202";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, logicalWidth, logicalHeight);
       
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const maxRadius = Math.max(canvas.width, canvas.height) * 0.9;
+      const centerX = logicalWidth / 2;
+      const centerY = logicalHeight / 2;
+      const maxRadius = Math.max(logicalWidth, logicalHeight) * 0.9;
 
       // 1. Draw the uniform lines with the knot distortion
       for (let i = 0; i < numLines; i++) {
@@ -116,7 +123,7 @@ export default function TopographicBackground() {
         gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
         
         ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, logicalWidth, logicalHeight);
         ctx.globalCompositeOperation = "source-over"; // reset
       }
 
