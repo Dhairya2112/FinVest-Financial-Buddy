@@ -38,7 +38,7 @@ export default function Login() {
         setError(data.message || "Failed to send verification code.");
       }
     } catch (err) {
-      setError("Failed to connect to the server.");
+      setError("Network Error: " + (err.message || "Failed to fetch"));
     } finally {
       setLoading(false);
     }
@@ -70,7 +70,7 @@ export default function Login() {
         setError(data.message || "Invalid verification code.");
       }
     } catch (err) {
-      setError("Failed to connect to the server.");
+      setError("Network Error: " + (err.message || "Failed to connect"));
     } finally {
       setLoading(false);
     }

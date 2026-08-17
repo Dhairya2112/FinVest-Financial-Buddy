@@ -57,49 +57,49 @@ def send_otp_email(to_email, otp_code):
 
 @auth_bp.route('/api/auth/request-otp', methods=['POST'])
 def request_otp():
-    data = request.json
-    email = data.get('email')
-    req_type = data.get('type', 'login') # 'login' or 'register'
-
-    if not email or not validate_email(email):
-        return jsonify({"status": "error", "message": "Valid email is required"}), 400
-
-    user = UserRepository.get_user_by_email(email)
-    
-    if req_type == 'login' and not user:
-        return jsonify({"status": "error", "message": "Account not found. Please register."}), 404
-        
-    if req_type == 'register' and user:
-        return jsonify({"status": "error", "message": "Email already registered. Please login."}), 409
-
-    # Generate 6-digit OTP
-    otp_code = ''.join(random.choices(string.digits, k=6))
-    
     try:
+        data = request.json
+        email = data.get('email')
+        req_type = data.get('type', 'login') # 'login' or 'register'
+
+        if not email or not validate_email(email):
+            return jsonify({"status": "error", "message": "Valid email is required"}), 400
+
+        user = UserRepository.get_user_by_email(email)
+        
+        if req_type == 'login' and not user:
+            return jsonify({"status": "error", "message": "Account not found. Please register."}), 404
+            
+        if req_type == 'register' and user:
+            return jsonify({"status": "error", "message": "Email already registered. Please login."}), 409
+
+        # Generate 6-digit OTP
+        otp_code = ''.join(random.choices(string.digits, k=6))
+        
         OtpRepository.create_otp(email, otp_code)
         send_otp_email(email, otp_code)
         return jsonify({"status": "success", "message": "OTP sent successfully"})
     except Exception as e:
         print("OTP Request Error:", str(e))
-        return jsonify({"status": "error", "message": "Failed to process OTP request"}), 500
+        return jsonify({"status": "error", "message": "Backend Error: " + str(e)}), 500
 
 @auth_bp.route('/api/auth/verify-otp', methods=['POST'])
 def verify_otp():
-    data = request.json
-    email = data.get('email')
-    otp_code = data.get('otp')
-    name = data.get('name')
-    req_type = data.get('type', 'login')
-
-    if not email or not otp_code:
-        return jsonify({"status": "error", "message": "Email and OTP are required"}), 400
-
-    # Validate OTP
-    valid_otp = OtpRepository.get_otp(email, otp_code)
-    if not valid_otp:
-        return jsonify({"status": "error", "message": "Invalid or expired OTP"}), 401
-
     try:
+        data = request.json
+        email = data.get('email')
+        otp_code = data.get('otp')
+        name = data.get('name')
+        req_type = data.get('type', 'login')
+
+        if not email or not otp_code:
+            return jsonify({"status": "error", "message": "Email and OTP are required"}), 400
+
+        # Validate OTP
+        valid_otp = OtpRepository.get_otp(email, otp_code)
+        if not valid_otp:
+            return jsonify({"status": "error", "message": "Invalid or expired OTP"}), 401
+
         user = UserRepository.get_user_by_email(email)
         is_new_user = False
         
@@ -133,7 +133,7 @@ def verify_otp():
         })
     except Exception as e:
         print("OTP Verification Error:", str(e))
-        return jsonify({"status": "error", "message": "Verification failed"}), 500
+        return jsonify({"status": "error", "message": "Backend Error: " + str(e)}), 500
 
 @auth_bp.route('/api/auth/logout', methods=['POST'])
 def logout():
