@@ -6,7 +6,9 @@ import datetime
 import os
 import random
 import string
-import requests
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from repositories.otp_repository import OtpRepository
 
 auth_bp = Blueprint('auth', __name__)
@@ -23,21 +25,19 @@ def generate_token(user_id):
     return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
 def send_otp_email(to_email, otp_code):
-    resend_api_key = os.environ.get('RESEND_API_KEY')
-    if not resend_api_key:
-        print("WARNING: RESEND_API_KEY missing. Cannot send OTP.")
+    sender_email = os.environ.get('SMTP_USERNAME')
+    sender_password = os.environ.get('SMTP_PASSWORD')
+    
+    if not sender_email or not sender_password:
+        print("WARNING: Gmail credentials missing. Cannot send OTP.")
         return True
     
-    url = "https://api.resend.com/emails"
-    headers = {
-        "Authorization": f"Bearer {resend_api_key}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "from": "FinVest Security <onboarding@resend.dev>",
-        "to": [to_email],
-        "subject": "FinVest Terminal Verification Code",
-        "html": f"""
+    msg = MIMEMultipart()
+    msg['From'] = f"FinVest Security <{sender_email}>"
+    msg['To'] = to_email
+    msg['Subject'] = "FinVest Terminal Verification Code"
+    
+    html_content = f"""
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #050505; color: #ffffff; padding: 40px; border-radius: 12px; border: 1px solid #1a1a1a;">
           <div style="text-align: center; margin-bottom: 30px;">
             <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 2px;">FINVEST TERMINAL</h1>
@@ -55,15 +55,19 @@ def send_otp_email(to_email, otp_code):
             </p>
           </div>
         </div>
-        """
-    }
+    """
+    
+    msg.attach(MIMEText(html_content, 'html'))
     
     try:
-        response = requests.post(url, headers=headers, json=data, timeout=10)
-        response.raise_for_status()
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.send_message(msg)
+        server.quit()
         return True
     except Exception as e:
-        print(f"Failed to send email via Resend: {e}")
+        print(f"Failed to send email via Gmail: {e}")
         return False
 
 @auth_bp.route('/api/auth/request-otp', methods=['POST'])
