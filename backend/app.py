@@ -4,8 +4,8 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 import re
-# Enable CORS for production Vercel app (including previews) and local development
-CORS(app, resources={r"/*": {"origins": [re.compile(r"https://.*\.vercel\.app"), "http://localhost:3000", "http://127.0.0.1:3000", "https://finvest-financial-buddy.vercel.app"]}})
+# Enable CORS for all domains globally to rule out Vercel Origin errors
+CORS(app)
 from dotenv import load_dotenv
 
 # Load from the backend directory specifically
