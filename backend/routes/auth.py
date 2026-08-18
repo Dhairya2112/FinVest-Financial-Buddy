@@ -103,10 +103,12 @@ def request_otp():
         except Exception as repo_e:
             return jsonify({"status": "error", "message": str(repo_e)}), 429
             
-        # FAST UI: Send email in a background thread so the user doesn't wait 3 seconds
-        import threading
-        email_thread = threading.Thread(target=send_otp_email, args=(email, otp_code))
-        email_thread.start()
+        # Run synchronously. Background threads are killed by Render's WSGI worker 
+        # before the SMTP connection finishes.
+        send_success = send_otp_email(email, otp_code)
+        
+        if not send_success:
+            return jsonify({"status": "error", "message": "Failed to connect to email provider. Please try again."}), 500
         
         return jsonify({"status": "success", "message": "OTP sent successfully"})
     except Exception as e:
