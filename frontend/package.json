@@ -9,13 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@react-oauth/google": "^0.13.5",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "framer-motion": "^13.1.0",
     "lucide-react": "^1.31.0",
     "next": "16.3.1",
-    "next-pwa": "^5.6.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "recharts": "^3.10.1",
