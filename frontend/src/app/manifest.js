@@ -13,7 +13,16 @@ export default function manifest() {
         sizes: 'any',
         type: 'image/svg+xml',
       },
-      // You should eventually add a 192x192 and 512x512 PNG here for proper PWA installation
+      {
+        src: '/icon-192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        src: '/icon-512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      }
     ],
   }
 }
