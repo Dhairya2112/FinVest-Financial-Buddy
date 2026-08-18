@@ -98,8 +98,16 @@ def request_otp():
         # Generate 6-digit OTP
         otp_code = ''.join(random.choices(string.digits, k=6))
         
-        OtpRepository.create_otp(email, otp_code)
-        send_otp_email(email, otp_code)
+        try:
+            OtpRepository.create_otp(email, otp_code)
+        except Exception as repo_e:
+            return jsonify({"status": "error", "message": str(repo_e)}), 429
+            
+        # FAST UI: Send email in a background thread so the user doesn't wait 3 seconds
+        import threading
+        email_thread = threading.Thread(target=send_otp_email, args=(email, otp_code))
+        email_thread.start()
+        
         return jsonify({"status": "success", "message": "OTP sent successfully"})
     except Exception as e:
         print("OTP Request Error:", str(e))

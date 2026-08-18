@@ -206,13 +206,13 @@ export default function LandingPage() {
 
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto pb-4">
             <Link href="/register" className="w-full sm:w-auto block">
-              <button className="w-full sm:w-auto px-10 py-4 bg-[var(--color-neon-green)] text-black font-bold rounded-md transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-lg shadow-[0_0_20px_rgba(127,255,0,0.15)]">
+              <button className="w-full sm:w-auto px-10 py-4 bg-[var(--color-neon-green)] text-black font-bold rounded-md transition-transform md:hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-lg shadow-[0_0_20px_rgba(127,255,0,0.15)]">
                 Deploy Workspace
                 <ArrowRight className="w-5 h-5" />
               </button>
             </Link>
             <Link href="/login" className="w-full sm:w-auto block">
-              <button className="w-full sm:w-auto px-10 py-4 bg-[#111113] text-white font-medium rounded-md border border-white/10 transition-all hover:bg-white/10 active:scale-95 text-lg flex items-center justify-center">
+              <button className="w-full sm:w-auto px-10 py-4 bg-[#111113] text-white font-medium rounded-md border border-white/10 transition-all md:hover:bg-white/10 active:scale-95 text-lg flex items-center justify-center">
                 Access Terminal
               </button>
             </Link>
@@ -243,9 +243,8 @@ export default function LandingPage() {
             <div className="w-full aspect-square md:aspect-video rounded-3xl bg-gradient-to-br from-[#111113] to-[#050505] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden flex items-center justify-center p-8 group">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:32px_32px]" />
               
-              <motion.div 
-                whileHover={{ scale: 1.05 }}
-                className="relative z-10 w-full max-w-sm bg-black border border-white/20 rounded-2xl p-6 shadow-2xl"
+              <div 
+                className="relative z-10 w-full max-w-sm bg-black border border-white/20 rounded-2xl p-6 shadow-2xl transition-transform duration-300 md:hover:scale-105"
               >
                 <div className="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
                    <span className="font-mono text-xs text-white/50 flex items-center gap-2">
@@ -264,7 +263,7 @@ export default function LandingPage() {
                 
                 {/* Scanning Laser */}
                 <div className="absolute top-[30%] left-0 w-full h-[2px] bg-[var(--color-neon-green)] shadow-[0_0_15px_rgba(127,255,0,0.8)] animate-[ping_3s_linear_infinite]" />
-              </motion.div>
+              </div>
             </div>
           </FeatureBlock>
 
@@ -279,7 +278,7 @@ export default function LandingPage() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
               
               <div className="relative z-10 w-56 h-56 rounded-full border border-white/5 bg-black/50 backdrop-blur-xl flex items-center justify-center shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] group">
-                <div className="w-40 h-40 rounded-full border-2 border-white/20 flex items-center justify-center bg-black/80 shadow-2xl relative transition-transform duration-700 group-hover:scale-110">
+                <div className="w-40 h-40 rounded-full border-2 border-white/20 flex items-center justify-center bg-black/80 shadow-2xl relative transition-transform duration-700 md:group-hover:scale-110">
                   <Lock className="w-12 h-12 text-white/90" />
                   <div className="absolute -bottom-4 bg-[#111] border border-white/20 px-3 py-1 rounded-full">
                     <span className="font-mono text-[9px] text-[var(--color-neon-green)] uppercase tracking-widest">AES-256 Valid</span>
@@ -338,7 +337,7 @@ export default function LandingPage() {
           <h2 className="font-grotesk text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">Ready to deploy?</h2>
           <p className="font-inter text-white/40 text-lg mx-auto mb-10 max-w-md font-light">Initialize your secure financial runtime today.</p>
           <Link href="/register">
-            <button className="px-10 py-4 bg-[var(--color-neon-green)] text-black font-bold rounded-md transition-transform hover:scale-105 active:scale-95 text-lg shadow-[0_0_30px_rgba(127,255,0,0.2)] mx-auto flex items-center justify-center gap-2">
+            <button className="px-10 py-4 bg-[var(--color-neon-green)] text-black font-bold rounded-md transition-transform md:hover:scale-105 active:scale-95 text-lg shadow-[0_0_30px_rgba(127,255,0,0.2)] mx-auto flex items-center justify-center gap-2">
               <Command className="w-5 h-5" /> Initialize Account
             </button>
           </Link>
