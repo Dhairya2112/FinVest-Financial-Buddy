@@ -18,7 +18,10 @@ def token_required(f):
 
         try:
             # Decode the token
-            secret_key = os.environ.get('SECRET_KEY', 'finvest-industry-grade-secret-jwt-key-2026')
+            secret_key = os.environ.get('SECRET_KEY')
+            if not secret_key:
+                return jsonify({'status': 'error', 'message': 'Internal Server Error: Secret Key not configured!'}), 500
+            
             data = jwt.decode(token, secret_key, algorithms=["HS256"])
             current_user_id = data['user_id']
         except jwt.ExpiredSignatureError:

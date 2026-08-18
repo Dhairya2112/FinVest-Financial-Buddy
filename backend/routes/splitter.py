@@ -30,7 +30,7 @@ def upload_receipt(current_user):
         # Open image from bytes
         image = Image.open(io.BytesIO(file.read()))
         
-        # We use gemini-1.5-flash because it's fast and supports multimodal (vision)
+        # We use gemini-3.5-flash because it's fast and supports multimodal (vision)
         model = genai.GenerativeModel("gemini-3.5-flash")
         
         prompt = """
@@ -53,13 +53,13 @@ def upload_receipt(current_user):
         
         response = model.generate_content([prompt, image])
         
+        import re
         text_response = response.text.strip()
-        if text_response.startswith('```json'):
-            text_response = text_response[7:]
-        if text_response.startswith('```'):
-            text_response = text_response[3:]
-        if text_response.endswith('```'):
-            text_response = text_response[:-3]
+        
+        # Robustly extract JSON using regex in case the LLM adds conversational text
+        json_match = re.search(r'\{.*\}', text_response, re.DOTALL)
+        if json_match:
+            text_response = json_match.group(0)
             
         try:
             data = json.loads(text_response.strip())
@@ -126,15 +126,14 @@ def distribute_split(current_user):
         """
 
         response = model.generate_content(system_prompt)
+        import re
         text_response = response.text.strip()
-        if text_response.startswith('```json'):
-            text_response = text_response[7:]
-        if text_response.startswith('```'):
-            text_response = text_response[3:]
-        if text_response.endswith('```'):
-            text_response = text_response[:-3]
+        
+        json_match = re.search(r'\{.*\}', text_response, re.DOTALL)
+        if json_match:
+            text_response = json_match.group(0)
 
-        distribution = json.loads(text_response.strip())
+        distribution = json.loads(text_response)
 
         if "error" in distribution:
             return jsonify({'status': 'error', 'message': distribution['error']}), 400

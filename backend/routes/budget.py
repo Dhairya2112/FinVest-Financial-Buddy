@@ -15,8 +15,19 @@ def get_budget(current_user_id):
     budget = BudgetRepository.get_budget(user_id)
     transactions = TransactionRepository.get_transactions(user_id)
 
-    # Calculate all-time spending
-    spent = sum(float(t['amount']) for t in transactions if t['type'] == 'expense')
+    from datetime import datetime
+    current_month = datetime.now().month
+
+    def get_month(date_str):
+        if isinstance(date_str, str):
+            try:
+                return datetime.strptime(date_str.split(' ')[0], '%Y-%m-%d').month
+            except ValueError:
+                return -1
+        return date_str.month if hasattr(date_str, 'month') else -1
+
+    # Calculate current month spending
+    spent = sum(float(t['amount']) for t in transactions if t['type'] == 'expense' and get_month(t['date']) == current_month)
     all_time_income = sum(float(t['amount']) for t in transactions if t['type'] == 'income')
 
     # Category breakdown

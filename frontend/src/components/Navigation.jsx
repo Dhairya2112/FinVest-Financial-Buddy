@@ -46,6 +46,16 @@ export default function Navigation() {
     window.location.reload();
   };
 
+  // GLOBAL AUTH GUARD: Prevents back-button cache glitches when logged out
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !isAuthOrLanding) {
+      const token = localStorage.getItem("finvest_token");
+      if (!token) {
+        window.location.replace("/login");
+      }
+    }
+  }, [pathname, isAuthOrLanding]);
+
   const handleLogout = () => {
     localStorage.removeItem("finvest_token");
     window.location.href = "/login";

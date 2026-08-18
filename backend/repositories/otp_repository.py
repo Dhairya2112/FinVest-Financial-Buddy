@@ -8,7 +8,7 @@ class OtpRepository:
         # Check rate limit (30 seconds)
         response = supabase_db.table("otp_requests").select("created_at").eq("email", email).order("created_at", desc=True).limit(1).execute()
         if response.data:
-            last_created = datetime.datetime.fromisoformat(response.data[0]['created_at'].replace('Z', '+00:00'))
+            last_created = datetime.datetime.strptime(response.data[0]['created_at'][:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=datetime.timezone.utc)
             if datetime.datetime.now(datetime.timezone.utc) < last_created + datetime.timedelta(seconds=30):
                 raise Exception("Please wait 30 seconds before requesting another OTP.")
 
@@ -39,7 +39,7 @@ class OtpRepository:
                 return None
 
             # 3. Check expiration
-            expires_at = datetime.datetime.fromisoformat(otp_record['expires_at'].replace('Z', '+00:00'))
+            expires_at = datetime.datetime.strptime(otp_record['expires_at'][:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=datetime.timezone.utc)
             if datetime.datetime.now(datetime.timezone.utc) <= expires_at:
                 return otp_record
         return None
