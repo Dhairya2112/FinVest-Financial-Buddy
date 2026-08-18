@@ -18,7 +18,7 @@ export default function Register() {
   
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [countdown, setCountdown] = useState(60);
+  const [countdown, setCountdown] = useState(30);
 
   useEffect(() => {
     let timer;
@@ -40,7 +40,7 @@ export default function Register() {
       });
       const data = await res.json();
       if (res.ok && data.status === "success") {
-        setCountdown(60);
+        setCountdown(30);
       } else {
         setError(data.message || "Failed to resend code.");
       }

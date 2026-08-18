@@ -17,7 +17,7 @@ export default function Login() {
   
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [countdown, setCountdown] = useState(60);
+  const [countdown, setCountdown] = useState(30);
 
   useEffect(() => {
     let timer;
@@ -39,7 +39,7 @@ export default function Login() {
       });
       const data = await res.json();
       if (res.ok && data.status === "success") {
-        setCountdown(60);
+        setCountdown(30);
       } else {
         setError(data.message || "Failed to resend code.");
       }
@@ -99,7 +99,7 @@ export default function Login() {
           router.push("/dashboard");
         }
       } else {
-        setError(data.message || "Invalid verification code.");
+        setError(data.message || "Invalid code. For security, you must request a new one.");
       }
     } catch (err) {
       setError("Network Error: " + (err.message || "Failed to connect"));
