@@ -67,14 +67,15 @@ def send_otp_email(to_email, otp_code):
     msg.attach(MIMEText(html_content, 'html'))
     
     try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        # Render free tier blocks port 587. Adding a strict 5-second timeout prevents Gunicorn from crashing.
+        server = smtplib.SMTP('smtp.gmail.com', 587, timeout=5)
         server.starttls()
         server.login(sender_email, sender_password)
         server.send_message(msg)
         server.quit()
         return True
     except Exception as e:
-        print(f"Failed to send email via Gmail: {e}")
+        print(f"Failed to send email via Gmail (Firewall/Timeout?): {e}")
         return False
 
 @auth_bp.route('/api/auth/request-otp', methods=['POST'])
