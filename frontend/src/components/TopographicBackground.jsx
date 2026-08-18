@@ -42,9 +42,9 @@ export default function TopographicBackground() {
     window.addEventListener("resize", resize);
     resize();
 
-    // Configuration for the concentric knot topography
-    const numLines = 24; 
-    const segments = 250; 
+    // Configuration for the concentric knot topography (Optimized for 60FPS CPU performance)
+    const numLines = 18; 
+    const segments = 160; 
     
     // Smooth mouse state
     let smoothMouse = { x: -1000, y: -1000 };

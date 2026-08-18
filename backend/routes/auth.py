@@ -172,6 +172,122 @@ def verify_otp():
 def logout():
     return jsonify({"status": "success", "message": "Logged out successfully"})
 
+@auth_bp.route('/api/auth/classic-register', methods=['POST'])
+def classic_register():
+    try:
+        data = request.json
+        name = data.get('name')
+        email = data.get('email')
+        password = data.get('password')
+
+        if not name or not email or not password:
+            return jsonify({"status": "error", "message": "Name, email, and password are required"}), 400
+        if not validate_email(email):
+            return jsonify({"status": "error", "message": "Valid email is required"}), 400
+
+        user = UserRepository.get_user_by_email(email)
+        if user:
+            return jsonify({"status": "error", "message": "Account already exists"}), 409
+
+        user_data = UserRepository.create_user(name, email, password)
+        user = user_data[0]
+        token = generate_token(user['id'])
+
+        return jsonify({
+            "status": "success",
+            "token": token,
+            "is_new_user": True,
+            "data": {
+                "id": user['id'],
+                "name": user['name'],
+                "email": user['email'],
+                "is_admin": user.get('is_admin')
+            }
+        })
+    except Exception as e:
+        print("Classic Register Error:", str(e))
+        return jsonify({"status": "error", "message": "Backend Error: " + str(e)}), 500
+
+@auth_bp.route('/api/auth/classic-login', methods=['POST'])
+def classic_login():
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+
+        if not email or not password:
+            return jsonify({"status": "error", "message": "Email and password are required"}), 400
+
+        user = UserRepository.get_user_by_email(email)
+        if not user:
+            return jsonify({"status": "error", "message": "Account not found"}), 404
+
+        if not UserRepository.verify_password(user['password_hash'], password):
+            return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+
+        token = generate_token(user['id'])
+
+        return jsonify({
+            "status": "success",
+            "token": token,
+            "is_new_user": False,
+            "data": {
+                "id": user['id'],
+                "name": user['name'],
+                "email": user['email'],
+                "is_admin": user.get('is_admin')
+            }
+        })
+    except Exception as e:
+        print("Classic Login Error:", str(e))
+        return jsonify({"status": "error", "message": "Backend Error: " + str(e)}), 500
+
+@auth_bp.route('/api/auth/google', methods=['POST'])
+def google_login():
+    try:
+        from google.oauth2 import id_token
+        from google.auth.transport import requests as google_requests
+        
+        data = request.json
+        token = data.get('credential')
+        if not token:
+            return jsonify({"status": "error", "message": "Missing credential"}), 400
+            
+        CLIENT_ID = "665272762732-6obfd86uddm8n7edq26fb6f8avdvptos.apps.googleusercontent.com"
+        idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), CLIENT_ID)
+        
+        email = idinfo['email']
+        name = idinfo.get('name', 'FinVest User')
+        
+        user = UserRepository.get_user_by_email(email)
+        is_new_user = False
+        
+        if not user:
+            # Create user if they don't exist
+            dummy_password = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
+            user_data = UserRepository.create_user(name, email, dummy_password)
+            user = user_data[0]
+            is_new_user = True
+            
+        custom_token = generate_token(user['id'])
+        
+        return jsonify({
+            "status": "success",
+            "token": custom_token,
+            "is_new_user": is_new_user,
+            "data": {
+                "id": user['id'],
+                "name": user['name'],
+                "email": user['email'],
+                "is_admin": user.get('is_admin')
+            }
+        })
+    except ValueError:
+        return jsonify({"status": "error", "message": "Invalid Google token"}), 401
+    except Exception as e:
+        print("Google Auth Error:", str(e))
+        return jsonify({"status": "error", "message": "Backend Error: " + str(e)}), 500
+
 from auth_middleware import token_required
 
 @auth_bp.route('/api/auth/me', methods=['GET'])

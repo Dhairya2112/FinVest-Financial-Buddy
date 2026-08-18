@@ -36,6 +36,9 @@
   .bento-card {
     @apply bg-bento-bg border border-bento-border rounded-[24px] p-6 shadow-xl relative overflow-hidden;
     transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s ease;
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
   
   /* Solid Neon Blocks for Treemap style */
