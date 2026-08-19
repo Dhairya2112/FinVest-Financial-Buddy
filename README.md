@@ -1,6 +1,6 @@
 <div align="center">
 
-# 💸 FinVest — Next-Gen Personal Finance Platform
+# 💸 FinVest — Next-Gen Personal Finance App
 
 **Industry-grade financial command center, engineered for the modern professional.**
 
