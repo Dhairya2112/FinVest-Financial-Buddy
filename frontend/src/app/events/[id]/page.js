@@ -35,7 +35,8 @@ export default function EventDetails() {
       const token = localStorage.getItem("finvest_token");
       if (!token) return router.push("/login");
 
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/transactions`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const res = await fetch(`${apiUrl}/api/events/${eventId}/transactions`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const json = await res.json();
@@ -55,7 +56,8 @@ export default function EventDetails() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("finvest_token");
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/transactions/add`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const res = await fetch(`${apiUrl}/api/events/${eventId}/transactions/add`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -98,7 +100,8 @@ export default function EventDetails() {
     const id = itemToDelete;
     try {
       const token = localStorage.getItem("finvest_token");
-      const res = await fetch(`http://localhost:5000/api/events/transactions/delete/${id}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const res = await fetch(`${apiUrl}/api/events/transactions/delete/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });

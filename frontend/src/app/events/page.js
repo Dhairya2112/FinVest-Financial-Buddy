@@ -58,7 +58,8 @@ export default function EventsPage() {
     if (!quickAmount) return;
     try {
       const token = localStorage.getItem("finvest_token");
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/transactions/add`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const res = await fetch(`${apiUrl}/api/events/${eventId}/transactions/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({
@@ -157,7 +158,8 @@ export default function EventsPage() {
     const id = eventToDelete;
     try {
       const token = localStorage.getItem("finvest_token");
-      const res = await fetch(`http://localhost:5000/api/events/delete/${id}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const res = await fetch(`${apiUrl}/api/events/delete/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
