@@ -44,7 +44,7 @@ function GlowBackground() {
       />
       
       {/* Ambient Animated Gradient Blobs (Hardware Accelerated CSS) */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--color-neon-green)]/[0.04] blur-[150px] animate-[pulse_12s_ease-in-out_infinite]" />
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[150px] animate-[pulse_12s_ease-in-out_infinite]" style={{ backgroundColor: 'rgba(127,255,0,0.04)' }} />
       <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-blue-500/[0.03] blur-[150px] animate-[pulse_15s_ease-in-out_infinite_reverse]" />
       <div className="absolute top-[30%] right-[10%] w-[40%] h-[40%] rounded-full bg-purple-500/[0.03] blur-[120px] animate-[pulse_10s_ease-in-out_infinite]" />
 

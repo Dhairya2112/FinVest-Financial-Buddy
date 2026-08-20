@@ -76,3 +76,33 @@ def set_budget(current_user_id):
         return jsonify({"status": "error", "message": str(e)}), 400
     except Exception as e:
         return jsonify({"status": "error", "message": "Failed to set budget."}), 500
+
+@budget_bp.route('/api/budget/micro', methods=['GET'])
+@token_required
+def get_micro_budgets(current_user_id):
+    """Get all category micro-budgets."""
+    try:
+        budgets = BudgetRepository.get_category_budgets(current_user_id)
+        return jsonify({
+            "status": "success",
+            "data": budgets
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": "Failed to fetch micro-budgets."}), 500
+
+@budget_bp.route('/api/budget/micro/set', methods=['POST'])
+@token_required
+def set_micro_budget(current_user_id):
+    """Set a category micro-budget."""
+    data = request.json
+    category = data.get('category')
+    amount = data.get('amount')
+
+    if not category:
+        return jsonify({"status": "error", "message": "Category is required."}), 400
+
+    try:
+        BudgetRepository.set_category_budget(current_user_id, category, float(amount))
+        return jsonify({"status": "success", "message": "Micro-budget updated"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": "Failed to update micro-budget."}), 500

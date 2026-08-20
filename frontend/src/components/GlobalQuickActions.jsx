@@ -16,7 +16,7 @@ export default function GlobalQuickActions() {
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Handle ESC key to close
+  // Handle ESC key to close and Custom Event to open
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") setIsOpen(false);
@@ -25,8 +25,15 @@ export default function GlobalQuickActions() {
         setIsOpen((prev) => !prev);
       }
     };
+    const handleOpenEvent = () => setIsOpen(true);
+    
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("open_quick_log", handleOpenEvent);
+    
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("open_quick_log", handleOpenEvent);
+    };
   }, []);
 
   const handleSubmit = async (e) => {

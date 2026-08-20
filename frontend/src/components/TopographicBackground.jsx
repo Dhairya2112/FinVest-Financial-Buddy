@@ -43,13 +43,24 @@ export default function TopographicBackground() {
     resize();
 
     // Configuration for the concentric knot topography (Optimized for 60FPS CPU performance)
-    const numLines = 18; 
-    const segments = 160; 
+    const isMobile = window.innerWidth < 768;
+    const numLines = isMobile ? 10 : 18; 
+    const segments = isMobile ? 80 : 160; 
     
     // Smooth mouse state
     let smoothMouse = { x: -1000, y: -1000 };
     
+    let isPageVisible = true;
+    const handleVisibilityChange = () => {
+      isPageVisible = !document.hidden;
+    };
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+
     const render = () => {
+      if (!isPageVisible) {
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
       time += 0.002; // Slow, elegant movement
       
       // Interpolate mouse for silky smooth spotlight tracking
@@ -136,6 +147,7 @@ export default function TopographicBackground() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseout", handleMouseLeave);
+      window.removeEventListener("visibilitychange", handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

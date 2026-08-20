@@ -22,20 +22,50 @@ export default function Budget() {
 
   useEffect(() => {
     fetchBudget();
-    const saved = localStorage.getItem("finvest_micro_budgets");
-    if (saved) setMicroBudgets(JSON.parse(saved));
+    fetchMicroBudgets();
   }, [router]);
 
-  const saveMicroBudget = (category) => {
-    const newBudgets = { ...microBudgets };
+  const fetchMicroBudgets = async () => {
+    try {
+      const token = localStorage.getItem("finvest_token");
+      if (!token) return;
+      const res = await fetch((process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000") + "/api/budget/micro", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const json = await res.json();
+      if (json.status === "success") {
+        setMicroBudgets(json.data || {});
+      }
+    } catch (err) {
+      console.error("Failed to fetch micro budgets", err);
+    }
+  };
+
+  const saveMicroBudget = async (category) => {
     const amt = parseCurrency(editAmount);
+    
+    // Optimistic UI update
+    const newBudgets = { ...microBudgets };
     if (amt > 0) newBudgets[category] = amt;
     else delete newBudgets[category];
-    
     setMicroBudgets(newBudgets);
-    localStorage.setItem("finvest_micro_budgets", JSON.stringify(newBudgets));
+    
     setEditingCategory(null);
     setEditAmount("");
+
+    try {
+      const token = localStorage.getItem("finvest_token");
+      await fetch((process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000") + "/api/budget/micro/set", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` 
+        },
+        body: JSON.stringify({ category, amount: amt || 0 })
+      });
+    } catch (err) {
+      console.error("Failed to sync micro budget to server", err);
+    }
   };
 
   const fetchBudget = async () => {

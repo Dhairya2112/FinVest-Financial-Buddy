@@ -95,10 +95,18 @@ export default function Dashboard() {
           <h1 className="font-grotesk text-5xl md:text-6xl font-bold tracking-tight text-white mb-2">
             OVERVIEW
           </h1>
-          <p className="font-mono text-white/40 uppercase tracking-widest text-sm flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[var(--color-neon-green)] animate-pulse"></span>
-            System Live
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="font-mono text-white/40 uppercase tracking-widest text-sm flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[var(--color-neon-green)] animate-pulse"></span>
+              System Live
+            </p>
+            <button 
+              onClick={() => window.dispatchEvent(new Event("open_quick_log"))} 
+              className="bg-[var(--color-neon-green)] text-black px-3 py-1 rounded-full text-xs font-bold font-mono uppercase tracking-widest flex items-center gap-1 shadow-lg hover:bg-white transition-colors"
+            >
+              <Plus className="w-3 h-3"/> Log
+            </button>
+          </div>
         </div>
         
         {/* Time Range Selectors */}
@@ -290,12 +298,11 @@ export default function Dashboard() {
           <p className="font-inter text-white/40 max-w-sm mb-6">Your cashflow chart will generate here automatically once you log your first transaction.</p>
           <button 
             onClick={() => {
-              // Trigger GlobalQuickActions via shortcut simulation or just instruct user
-              alert("Press CTRL+K to quick log your first transaction!");
+              window.dispatchEvent(new Event("open_quick_log"));
             }}
-            className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg font-mono text-xs uppercase tracking-widest text-white transition-colors border border-white/10"
+            className="px-6 py-3 bg-white text-black hover:bg-gray-200 rounded-lg font-mono text-sm font-bold uppercase tracking-widest transition-colors flex items-center gap-2"
           >
-            Press CTRL+K to Log
+            <Plus className="w-4 h-4"/> Log First Transaction
           </button>
         </motion.div>
       )}

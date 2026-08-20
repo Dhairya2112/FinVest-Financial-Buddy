@@ -1,6 +1,7 @@
 import { Space_Grotesk, Space_Mono, Inter } from "next/font/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Navigation from "@/components/Navigation";
+import TopographicBackground from "@/components/TopographicBackground";
 import GlobalQuickActions from "@/components/GlobalQuickActions";
 import ServerWakeupIndicator from "@/components/ServerWakeupIndicator";
 import { Analytics } from "@vercel/analytics/next";
@@ -39,6 +40,7 @@ export default function RootLayout({ children }) {
       >
         <GoogleOAuthProvider clientId="665272762732-6obfd86uddm8n7edq26fb6f8avdvptos.apps.googleusercontent.com">
           <div className="relative flex flex-col min-h-[100dvh] overflow-hidden">
+             <TopographicBackground />
              <Navigation />
              <main className="relative z-10 w-full flex-1">
                 {children}

@@ -11,7 +11,6 @@ const withPWA = withPWAInit({
 const nextConfig = {
   /* config options here */
   experimental: {
-    turbopack: {},
     workerThreads: false,
     cpus: 1
   }
