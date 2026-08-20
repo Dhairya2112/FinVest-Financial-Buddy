@@ -187,7 +187,7 @@ export default function Onboarding() {
                   className="px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors flex items-center gap-2 group w-full md:w-auto justify-center disabled:opacity-50"
                 >
                   {loading ? (
-                    <><Loader2 className="w-5 h-5 animate-spin" /> Finalizing...</>
+                    <>Finalizing...</>
                   ) : step === steps.length - 1 ? (
                     <><CheckCircle2 className="w-5 h-5" /> Initialize Dashboard</>
                   ) : (

@@ -100,8 +100,17 @@ export default function Budget() {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-24 pb-12 px-6 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-white/20 border-t-[var(--color-neon-orange)] rounded-full animate-spin" />
+      <div className="max-w-4xl mx-auto pt-24 pb-12 px-6 animate-pulse space-y-8 min-h-screen">
+        <div className="space-y-4 mb-12">
+          <div className="w-64 h-12 bg-white/5 rounded-xl" />
+          <div className="w-48 h-4 bg-white/5 rounded-full" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="h-[280px] bg-white/5 rounded-3xl" />
+          <div className="h-[280px] bg-white/5 rounded-3xl" />
+          <div className="h-[280px] bg-white/5 rounded-3xl" />
+        </div>
+        <div className="w-full h-[400px] bg-white/5 rounded-3xl mt-8" />
       </div>
     );
   }
@@ -253,10 +262,12 @@ export default function Budget() {
               <div className="relative flex-1">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 font-mono">{getCurrencySymbol()}</span>
                 <input 
-                  type="number"
-                  required min="1" step="0.01"
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9.]*"
+                  required
                   value={newBudget}
-                  onChange={(e) => setNewBudget(e.target.value)}
+                  onChange={(e) => setNewBudget(e.target.value.replace(/[^0-9.]/g, ''))}
                   placeholder={formatCurrencyNoSymbol(data?.budget_amount)}
                   className="w-full bg-black border border-white/10 rounded-xl py-3 pl-8 pr-4 font-grotesk text-xl font-bold text-white outline-none focus:border-[var(--color-neon-orange)] transition-colors"
                 />
@@ -343,7 +354,11 @@ export default function Budget() {
                           <div className="flex gap-2 mt-3 bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
                             <span className="text-white/40 flex items-center pl-2 font-mono">{getCurrencySymbol()}</span>
                             <input 
-                              type="number" value={editAmount} onChange={e => setEditAmount(e.target.value)} 
+                              type="text" 
+                              inputMode="decimal"
+                              pattern="[0-9.]*"
+                              value={editAmount} 
+                              onChange={e => setEditAmount(e.target.value.replace(/[^0-9.]/g, ''))} 
                               placeholder="Limit" 
                               className="bg-transparent text-white font-mono outline-none w-full"
                               autoFocus

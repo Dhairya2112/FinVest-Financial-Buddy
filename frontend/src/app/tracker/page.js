@@ -359,33 +359,23 @@ export default function Tracker() {
                 </table>
               </div>
 
-              {/* MOBILE VIEW: Swipe-to-Delete Gesture List */}
+              {/* MOBILE VIEW: Card List */}
               <div className="md:hidden flex flex-col gap-3">
                 <AnimatePresence>
                   {sortedTransactions.map((tx) => (
-                    <div key={`mobile-${tx.id}`} className="relative rounded-2xl overflow-hidden bg-red-500/20 shadow-lg">
-                      {/* Red Background (Revealed on Swipe) */}
-                      <div className="absolute inset-y-0 right-0 w-24 flex items-center justify-end pr-6">
-                         <Trash2 className="w-6 h-6 text-red-500" />
-                      </div>
-                      
-                      {/* Swipeable Card */}
-                      <motion.div
-                        drag="x"
-                        dragConstraints={{ left: -100, right: 0 }}
-                        dragElastic={0.2}
-                        onDragEnd={(e, { offset, velocity }) => {
-                          if (offset.x < -60 || velocity.x < -500) {
-                            confirmDelete(tx.id);
-                          }
-                        }}
-                        className="relative z-10 bg-black/90 backdrop-blur-xl border border-white/10 p-5 rounded-2xl flex justify-between items-center"
-                      >
-                        <div className="flex flex-col gap-1">
+                    <motion.div
+                      key={`mobile-${tx.id}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="bg-[#0a0a0a] border border-white/10 p-5 rounded-2xl shadow-lg relative group"
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
                           <p className="font-inter text-white font-medium text-base">{tx.category}</p>
                           <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">{tx.date}</p>
                         </div>
-                        <div className="flex flex-col items-end gap-1">
+                        <div className="flex flex-col items-end gap-2">
                           <p className={`font-grotesk font-bold text-xl ${tx.type === 'income' ? 'text-[var(--color-neon-green)]' : 'text-white'}`}>
                             {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                           </p>
@@ -395,8 +385,16 @@ export default function Tracker() {
                             {tx.type}
                           </span>
                         </div>
-                      </motion.div>
-                    </div>
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-white/5 flex justify-end">
+                        <button 
+                          onClick={() => confirmDelete(tx.id)}
+                          className="px-4 py-2 bg-red-500/10 text-red-400 hover:bg-red-500/30 border border-red-500/20 rounded-xl transition-colors flex items-center gap-2 font-mono text-xs uppercase tracking-widest"
+                        >
+                          <Trash2 className="w-4 h-4" /> Delete
+                        </button>
+                      </div>
+                    </motion.div>
                   ))}
                 </AnimatePresence>
               </div>

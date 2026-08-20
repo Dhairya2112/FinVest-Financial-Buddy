@@ -32,14 +32,24 @@ function GlowBackground() {
   return (
     <div 
       ref={bgRef}
-      className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-1000"
-      style={{
-        background: `radial-gradient(circle 800px at var(--x, 50vw) var(--y, 50vh), rgba(127,255,0,0.07), transparent 80%)`,
-        backgroundColor: "#030303"
-      }}
+      className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
+      style={{ backgroundColor: "#020202" }}
     >
+      {/* Dynamic Mouse Spotlight */}
+      <div 
+        className="absolute inset-0 opacity-80"
+        style={{
+          background: `radial-gradient(circle 800px at var(--x, 50vw) var(--y, 50vh), rgba(127,255,0,0.06), transparent 80%)`,
+        }}
+      />
+      
+      {/* Ambient Animated Gradient Blobs (Hardware Accelerated CSS) */}
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[var(--color-neon-green)]/[0.04] blur-[150px] animate-[pulse_12s_ease-in-out_infinite]" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-blue-500/[0.03] blur-[150px] animate-[pulse_15s_ease-in-out_infinite_reverse]" />
+      <div className="absolute top-[30%] right-[10%] w-[40%] h-[40%] rounded-full bg-purple-500/[0.03] blur-[120px] animate-[pulse_10s_ease-in-out_infinite]" />
+
       {/* Crisp Tactical Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_20%,transparent_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_10%,transparent_100%)]" />
     </div>
   );
 }

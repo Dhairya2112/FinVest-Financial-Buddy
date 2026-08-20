@@ -52,6 +52,15 @@ export default function GlobalQuickActions() {
       });
       const data = await res.json();
       if (res.ok && data.status === "success") {
+        // Save to recent categories
+        try {
+          let recent = JSON.parse(localStorage.getItem('finvest_recent_categories') || '["Food", "Transport", "Subscriptions"]');
+          if (!recent.includes(category)) {
+            recent = [category, ...recent].slice(0, 5); // Keep top 5
+            localStorage.setItem('finvest_recent_categories', JSON.stringify(recent));
+          }
+        } catch (e) {}
+
         setIsOpen(false);
         setAmount("");
         setCategory("");
@@ -145,12 +154,12 @@ export default function GlobalQuickActions() {
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-white/40">{getCurrencySymbol()}</span>
                     <input 
-                      type="number" 
-                      step="0.01"
-                      min="0"
+                      type="text" 
+                      inputMode="decimal"
+                      pattern="[0-9.]*"
                       required
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))}
                       placeholder="0.00"
                       className="w-full bg-black/40 border border-white/10 rounded-xl py-4 pl-12 pr-4 font-grotesk text-2xl font-bold text-white outline-none focus:border-[var(--color-neon-green)] transition-colors"
                     />
@@ -166,6 +175,26 @@ export default function GlobalQuickActions() {
                     placeholder="e.g. Groceries, Salary..."
                     className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 font-inter text-white outline-none focus:border-white/30 transition-colors"
                   />
+                  {/* Smart Categorization Pills */}
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {(() => {
+                      try {
+                        const saved = JSON.parse(localStorage.getItem('finvest_recent_categories') || '["Food", "Transport", "Subscriptions"]');
+                        return saved.slice(0, 4).map(cat => (
+                          <button
+                            key={cat}
+                            type="button"
+                            onClick={() => setCategory(cat)}
+                            className="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-xs font-mono text-white/60 transition-colors"
+                          >
+                            {cat}
+                          </button>
+                        ));
+                      } catch {
+                        return null;
+                      }
+                    })()}
+                  </div>
                 </div>
                 <div>
                   <label className="font-mono text-xs text-white/40 uppercase tracking-widest mb-2 block">Date</label>

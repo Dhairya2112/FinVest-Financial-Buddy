@@ -229,7 +229,7 @@ export default function EventsPage() {
                   </div>
                   <div>
                     <label className="text-xs font-mono text-white/40 uppercase mb-1 block">Budget Amount</label>
-                    <input required type="number" step="0.01" min="1" value={budget} onChange={e=>setBudget(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-white outline-none focus:border-[var(--color-neon-yellow)]" placeholder="5000" />
+                    <input required type="text" inputMode="decimal" pattern="[0-9.]*" value={budget} onChange={e=>setBudget(e.target.value.replace(/[^0-9.]/g, ''))} className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-white outline-none focus:border-[var(--color-neon-yellow)]" placeholder="5000" />
                   </div>
                   <div>
                     <label className="text-xs font-mono text-white/40 uppercase mb-1 block">Start Date</label>
@@ -383,7 +383,7 @@ export default function EventsPage() {
                           <div>
                             <div className="relative">
                               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 font-mono">{getCurrencySymbol()}</span>
-                              <input required type="number" step="0.01" min="0.01" value={quickAmount} onChange={e=>setQuickAmount(e.target.value)} placeholder="0.00" className="w-full bg-black/50 border border-white/20 rounded-xl py-3 pl-8 pr-4 font-mono font-bold text-white text-lg outline-none focus:border-[var(--color-neon-yellow)]" autoFocus />
+                              <input required type="text" inputMode="decimal" pattern="[0-9.]*" value={quickAmount} onChange={e=>setQuickAmount(e.target.value.replace(/[^0-9.]/g, ''))} placeholder="0.00" className="w-full bg-black/50 border border-white/20 rounded-xl py-3 pl-8 pr-4 font-mono font-bold text-white text-lg outline-none focus:border-[var(--color-neon-yellow)]" autoFocus />
                             </div>
                           </div>
                           <div>

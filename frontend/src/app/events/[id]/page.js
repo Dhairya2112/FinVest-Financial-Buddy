@@ -179,7 +179,7 @@ export default function EventDetails() {
                     <label className="text-xs font-mono text-white/40 uppercase mb-1 block">Amount</label>
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-white/40">{getCurrencySymbol()}</span>
-                      <input required type="number" step="0.01" value={amount} onChange={e=>setAmount(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white outline-none focus:border-[var(--color-neon-yellow)]" placeholder="0.00" />
+                      <input required type="text" inputMode="decimal" pattern="[0-9.]*" value={amount} onChange={e=>setAmount(e.target.value.replace(/[^0-9.]/g, ''))} className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white outline-none focus:border-[var(--color-neon-yellow)]" placeholder="0.00" />
                     </div>
                   </div>
                   <div>
@@ -204,53 +204,97 @@ export default function EventDetails() {
               <p className="text-white/40 font-inter">No transactions logged for this event.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left font-inter text-sm whitespace-nowrap">
-                <thead>
-                  <tr className="border-b border-white/10 text-white/40 font-mono uppercase tracking-widest text-xs">
-                    <th className="py-4 pl-4">Date</th>
-                    <th className="py-4">Category</th>
-                    <th className="py-4">Type</th>
-                    <th className="py-4 text-right">Amount</th>
-                    <th className="py-4 pr-4 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
+            <>
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left font-inter text-sm whitespace-nowrap">
+                  <thead>
+                    <tr className="border-b border-white/10 text-white/40 font-mono uppercase tracking-widest text-xs">
+                      <th className="py-4 pl-4">Date</th>
+                      <th className="py-4">Category</th>
+                      <th className="py-4">Type</th>
+                      <th className="py-4 text-right">Amount</th>
+                      <th className="py-4 pr-4 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {transactions.map((tx, idx) => {
+                      const id = tx.id || tx.ID;
+                      return (
+                      <motion.tr 
+                        key={id}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="hover:bg-white/5 transition-colors group"
+                      >
+                        <td className="py-4 pl-4 text-white/60 font-mono">{new Date(tx.date).toLocaleDateString()}</td>
+                        <td className="py-4 text-white font-medium">{tx.category}</td>
+                        <td className="py-4">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold font-mono uppercase tracking-wider ${
+                            tx.type === 'income' ? 'bg-[var(--color-neon-green)]/10 text-[var(--color-neon-green)]' : 'bg-white/10 text-white'
+                          }`}>
+                            {tx.type === 'income' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                            {tx.type}
+                          </span>
+                        </td>
+                        <td className={`py-4 text-right font-grotesk font-bold text-lg ${
+                          tx.type === 'income' ? 'text-[var(--color-neon-green)]' : 'text-white'
+                        }`}>
+                          {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
+                        </td>
+                        <td className="py-4 pr-4 text-right">
+                          <button onClick={() => confirmDelete(id)} className="p-2 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors inline-block opacity-0 group-hover:opacity-100">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </motion.tr>
+                    )})}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* MOBILE VIEW: Cards */}
+              <div className="md:hidden flex flex-col gap-3">
+                <AnimatePresence>
                   {transactions.map((tx, idx) => {
                     const id = tx.id || tx.ID;
                     return (
-                    <motion.tr 
-                      key={id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      className="hover:bg-white/5 transition-colors"
+                    <motion.div
+                      key={`mobile-${id}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="bg-[#0a0a0a] border border-white/10 p-5 rounded-2xl shadow-lg relative"
                     >
-                      <td className="py-4 pl-4 text-white/60 font-mono">{new Date(tx.date).toLocaleDateString()}</td>
-                      <td className="py-4 text-white font-medium">{tx.category}</td>
-                      <td className="py-4">
-                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold font-mono uppercase tracking-wider ${
-                          tx.type === 'income' ? 'bg-[var(--color-neon-green)]/10 text-[var(--color-neon-green)]' : 'bg-white/10 text-white'
-                        }`}>
-                          {tx.type === 'income' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                          {tx.type}
-                        </span>
-                      </td>
-                      <td className={`py-4 text-right font-grotesk font-bold text-lg ${
-                        tx.type === 'income' ? 'text-[var(--color-neon-green)]' : 'text-white'
-                      }`}>
-                        {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
-                      </td>
-                      <td className="py-4 pr-4 text-right">
-                        <button onClick={() => confirmDelete(id)} className="p-2 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors inline-block">
-                          <Trash2 className="w-4 h-4" />
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="font-inter text-white font-medium text-base">{tx.category}</p>
+                          <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">{new Date(tx.date).toLocaleDateString()}</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-2">
+                          <p className={`font-grotesk font-bold text-xl ${tx.type === 'income' ? 'text-[var(--color-neon-green)]' : 'text-white'}`}>
+                            {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
+                          </p>
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[8px] font-bold font-mono uppercase tracking-wider ${
+                            tx.type === 'income' ? 'bg-[var(--color-neon-green)]/10 text-[var(--color-neon-green)]' : 'bg-white/10 text-white'
+                          }`}>
+                            {tx.type}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-white/5 flex justify-end">
+                        <button 
+                          onClick={() => confirmDelete(id)}
+                          className="px-4 py-2 bg-red-500/10 text-red-400 hover:bg-red-500/30 border border-red-500/20 rounded-xl transition-colors flex items-center gap-2 font-mono text-xs uppercase tracking-widest"
+                        >
+                          <Trash2 className="w-4 h-4" /> Delete
                         </button>
-                      </td>
-                    </motion.tr>
+                      </div>
+                    </motion.div>
                   )})}
-                </tbody>
-              </table>
-            </div>
+                </AnimatePresence>
+              </div>
+            </>
           )}
         </div>
 

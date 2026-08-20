@@ -241,7 +241,7 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Cumulative Wealth Area Chart */}
-      {chartData.length > 0 && (
+      {chartData.length > 0 ? (
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -275,6 +275,28 @@ export default function Dashboard() {
               </AreaChart>
             </ResponsiveContainer>
           </div>
+        </motion.div>
+      ) : (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bento-card mb-12 flex flex-col items-center justify-center min-h-[300px] text-center border-dashed border-white/10"
+        >
+          <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
+            <Activity className="w-8 h-8 text-white/20" />
+          </div>
+          <h3 className="font-grotesk text-xl font-bold text-white mb-2">Awaiting Telemetry</h3>
+          <p className="font-inter text-white/40 max-w-sm mb-6">Your cashflow chart will generate here automatically once you log your first transaction.</p>
+          <button 
+            onClick={() => {
+              // Trigger GlobalQuickActions via shortcut simulation or just instruct user
+              alert("Press CTRL+K to quick log your first transaction!");
+            }}
+            className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg font-mono text-xs uppercase tracking-widest text-white transition-colors border border-white/10"
+          >
+            Press CTRL+K to Log
+          </button>
         </motion.div>
       )}
 

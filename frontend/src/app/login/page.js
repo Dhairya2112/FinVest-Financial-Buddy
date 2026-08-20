@@ -44,6 +44,8 @@ export default function Login() {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    setError("");
     try {
       const res = await fetch((process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000") + "/api/auth/google", {
         method: "POST",
@@ -65,6 +67,8 @@ export default function Login() {
       }
     } catch (err) {
       setError("Network Error: " + (err.message || "Failed to connect"));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,7 +154,7 @@ export default function Login() {
               <div className="h-px bg-gray-800 flex-1"></div>
             </div>
 
-            <div className="flex justify-center mb-6">
+            <div className={`flex justify-center mb-6 transition-opacity ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => setError("Google Login Failed.")}

@@ -326,7 +326,7 @@ export default function Splitter() {
                     <span className="text-sm text-white font-mono truncate">{file.name}</span>
                   </div>
                   <button onClick={handleUpload} disabled={loading} className="w-full py-3 bg-[var(--color-neon-orange)] text-black font-bold rounded-xl hover:bg-white transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
-                    {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Extracting Data...</> : <><ArrowRight className="w-5 h-5" /> Execute Vision AI</>}
+                    {loading ? <>Extracting Data...</> : <><ArrowRight className="w-5 h-5" /> Execute Vision AI</>}
                   </button>
                 </div>
               )}
